@@ -10,16 +10,33 @@ import { Overlay } from '@angular/cdk/overlay';
 import { AuthService } from './auth.service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+import { StorageService } from '../storage/storage.service';
+
 describe('AuthService', () => {
   let service: AuthService;
   let apiService: ApiService;
   let httpTestingController: HttpTestingController;
+  let storageService: StorageService;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule, RouterTestingModule, BrowserAnimationsModule],
-      providers: [AuthService, ApiService, NzMessageService, Overlay]
+      providers: [AuthService, ApiService, NzMessageService, Overlay, StorageService]
     });
+
+    const store = {};
+
+    spyOn(localStorage.__proto__, 'getItem').and.callFake( (key: string): string => {
+     return store[key] || null;
+    });
+    spyOn(localStorage.__proto__, 'setItem').and.callFake((key: string, value: string): string =>  {
+      return store[key] = ( value as string);
+    });
+    spyOn(localStorage.__proto__, 'removeItem').and.callFake((key: string): void =>  {
+      delete store[key];
+    });
+
+    storageService = TestBed.inject(StorageService);
     service = TestBed.inject(AuthService);
     apiService = TestBed.inject(ApiService);
     httpTestingController = TestBed.inject(HttpTestingController);

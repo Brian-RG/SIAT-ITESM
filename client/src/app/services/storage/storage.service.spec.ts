@@ -9,13 +9,13 @@ describe('StorageService', () => {
     TestBed.configureTestingModule({});
     const store = {};
 
-    spyOn(localStorage, 'getItem').and.callFake( (key: string): string => {
+    spyOn(localStorage.__proto__, 'getItem').and.callFake( (key: string): string => {
      return store[key] || null;
     });
-    spyOn(localStorage, 'setItem').and.callFake((key: string, value: string): string =>  {
+    spyOn(localStorage.__proto__, 'setItem').and.callFake((key: string, value: string): string =>  {
       return store[key] = ( value as string);
     });
-    spyOn(localStorage, 'removeItem').and.callFake((key: string): void =>  {
+    spyOn(localStorage.__proto__, 'removeItem').and.callFake((key: string): void =>  {
       delete store[key];
     });
 
