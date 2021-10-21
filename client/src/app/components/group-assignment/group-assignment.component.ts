@@ -52,6 +52,20 @@ export class GroupAssignmentComponent implements OnInit {
     return new Date(today.getFullYear(), today.getMonth(), today.getDate(), 0, 0, 0);
   }
 
+  public validateHours(event : any){
+    console.log(event.startTime, event.endTime);
+    if(event.startTime !== null && event.endTime !== null){
+      if(event.startTime.getTime() >= event.endTime.getTime()){
+        //event.endTime = null;
+        //event.startTime = null;
+        //this.nzMessageService.error('Error, inserte horas de inicio y fin válidas');
+        return false;
+      }
+      return true;
+    }
+    return false;
+  }
+
   public getProfessors() {
     this.isLoadingProfessors = true;
     this.professors = [];
@@ -176,6 +190,21 @@ export class GroupAssignmentComponent implements OnInit {
   }
 
   public assignGroup() {
+    let parsed_events = this.parseEvents();
+    let all_good = true;
+    for(let [i,event] of this.events.entries()){
+      if(this.events[i] !== null){
+        if(!this.validateHours(event)){
+          all_good=false;
+        }
+      }
+    }
+
+    if(!all_good){
+      this.nzMessageService.error("No se pudo asignar grupo, por favor asegúrese que los horarios son correctos.");
+      return;
+    }
+
     const objectToSend = {
       classroomId: this.classroomId,
       professorsIds: this.professors,
@@ -279,6 +308,6 @@ export class GroupAssignmentComponent implements OnInit {
         }
       }
     }
-    return events;
+      return events;
   }
 }

@@ -9,7 +9,8 @@ const WHITELIST = ['http://localhost/', 'http://129.146.30.58'];
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.setGlobalPrefix('api');
+  //TODO: Change the prefix to /api in production
+  app.setGlobalPrefix('');
   app.use(helmet());
   app.useGlobalPipes(new ValidationPipe({ transform: true }));
   app.enableCors({

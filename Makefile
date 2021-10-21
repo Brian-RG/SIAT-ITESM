@@ -11,7 +11,7 @@ certbot-prod:
 	@sudo ./webserver/register_ssl.sh \
 								--domains "$(DOMAINS)" \
 								--email $(EMAIL) \
-								--data-path ./webserver/certbot \
+								--data-path "./webserver/certbot" \
 								--staging 0
 
 deploy-test:
