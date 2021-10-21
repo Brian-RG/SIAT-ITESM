@@ -14,7 +14,7 @@ services:
         POSTGRES_PASSWORD: 'testpass'
 
   siat-api:
-    image: "vini24/siat-tec:api"
+    image: "brianreyes/tec-siat:api"
     container_name: siat-api
     environment:
         - DB_HOST=siat-db
@@ -24,12 +24,12 @@ services:
         - siat-db
 
   siat-client:
-    image: "vini24/siat-tec:client"
+    image: "brianreyes/tec-siat:frontend"
     container_name: siat-client
     restart: always
     volumes:
         - ./webserver/nginx/default.conf:/etc/nginx/conf.d/default.conf
-        - ./webserver/nginx/siat.codes.conf:/etc/nginx/sites-enabled/siat.codes.conf
+        - ./webserver/nginx/tec.siat.conf:/etc/nginx/sites-enabled/tec.siat.conf
         - ./webserver/nginx/nginx.conf:/etc/nginx/nginx.conf
         - ./webserver/certbot/conf:/etc/letsencrypt
         - ./webserver/certbot/www:/var/www/certbot
