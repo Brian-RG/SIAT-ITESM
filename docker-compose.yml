@@ -29,7 +29,7 @@ services:
     restart: always
     volumes:
         - ./webserver/nginx/default.conf:/etc/nginx/conf.d/default.conf
-        - ./webserver/nginx/tec.siat.beaver.com.pe.conf:/etc/nginx/sites-enabled/tec.siat.beaver.com.pe.conf
+        - ./webserver/nginx/tec-siat.codes.conf:/etc/nginx/sites-enabled/tec-siat.codes.conf
         - ./webserver/nginx/nginx.conf:/etc/nginx/nginx.conf
         - ./webserver/certbot/conf:/etc/letsencrypt
         - ./webserver/certbot/www:/var/www/certbot
