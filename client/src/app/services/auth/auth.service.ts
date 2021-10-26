@@ -41,16 +41,16 @@ export class AuthService {
           callback({loading: false});
           this.nzMessageService.success('Bienvenido a SIAT');
         } else if (response.status.statusCode === 401){
-          this.nzMessageService.error('Ocurrió un error, intena más tarde');
+          this.nzMessageService.error('Ocurrió un error, intenta más tarde');
           callback({loading: false});
         } else {
-          this.nzMessageService.error('Ocurrió un error, intena más tarde');
+          this.nzMessageService.error('Ocurrió un error, intenta más tarde');
           callback({loading: false});
         }
       },
       (error) => {
         callback({loading: false});
-        this.nzMessageService.error('Ocurrió un error, intena más tarde');
+        this.nzMessageService.error('Ocurrió un error, intenta más tarde');
         console.error('There was an error at the login, ', error);
       }
     );
