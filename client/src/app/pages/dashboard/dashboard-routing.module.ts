@@ -1,16 +1,10 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
-import { CoursesComponent } from '../../components/courses/courses.component';
-import { ProfessorsComponent } from '../../components/professors/professors.component';
-import { ClassroomsComponent } from '../../components/classrooms/classrooms.component';
-import { PeriodsComponent } from '../../components/periods/periods.component';
-import { ModulesComponent } from 'src/app/components/modules/modules.component';
-import { BlocksComponent } from 'src/app/components/blocks/blocks.component';
+//import { LayoutProfessorComponent } from 'src/app/components/layout-professor/layout-professor.component';
+import { PeriodsComponent } from 'src/app/components/periods/periods.component';
+import { ProfessorviewComponent } from 'src/app/components/professorview/professorview.component';
+//import { ScheduleProfessorComponent } from 'src/app/components/schedule-professor/schedule-professor.component';
 import { LayoutComponent } from 'src/app/components/layout/layout.component';
-import { PeriodComponent } from 'src/app/components/period/period.component';
-import { GroupClassroomComponent } from 'src/app/components/group-classroom/group-classroom.component';
-import { AvenuesComponent } from 'src/app/components/avenues/avenues.component';
-
 
 const routes: Routes = [
   {
@@ -22,36 +16,8 @@ const routes: Routes = [
         component: PeriodsComponent,
       },
       {
-        path: 'maestros',
-        component: ProfessorsComponent
-      },
-      {
-        path: 'materias',
-        component: CoursesComponent
-      },
-      {
-        path: 'modulos',
-        component: ModulesComponent
-      },
-      {
-        path: 'bloques',
-        component: BlocksComponent
-      },
-      {
-        path: 'salones',
-        component: ClassroomsComponent
-      },
-      {
-        path: 'avenidas',
-        component: AvenuesComponent
-      },
-      {
-        path: 'periodo/:id',
-        component: PeriodComponent
-      },
-      {
-        path: 'periodo/:periodId/salon/:classroomId',
-        component: GroupClassroomComponent
+        path: 'Horarios',
+        component: ProfessorviewComponent,
       }
     ]
   }
@@ -61,4 +27,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
+
 export class DashboardRoutingModule { }

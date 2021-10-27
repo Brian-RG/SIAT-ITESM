@@ -1,0 +1,100 @@
+<nz-table [nzBordered]="true" [nzData]="hourKeyIndexes" [nzShowPagination]="false" [nzScroll]="{ y: '75vh' }">
+  <thead>
+    <tr>
+      <th>Hora</th>
+      <th>Lunes</th>
+      <th>Martes</th>
+      <th>Miércoles</th>
+      <th>Jueves</th>
+      <th>Viernes</th>
+      <th>Sábado</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let hour of getHours()">
+      <td>
+        {{hour}}
+      </td>
+      <ng-container *ngFor="let day of hourKeyIndexes">
+        <td>
+          <ng-container *ngIf="day[hour] as event;">
+            <ng-container *ngIf="event.isModule; else course">
+              <small style="cursor: pointer;" nz-popover
+                [nzPopoverTitle]="'Modulo ' + event.group.module.name + ' - ' + event.group.group.course21.name"
+                [nzPopoverContent]="popoverContent"
+                nzPopoverTrigger="hover"><a>Modulo {{event.group.module.name + ' - ' + event.group.group.course21.key + ' - Grupo ' + event.group.group.number}}</a></small>
+                <ng-template #popoverContent>
+                  <small>
+                    Grupo {{event.group.group.number}}
+                  </small>
+                  <br>
+                  <small>
+                    Semana Inicial {{event.group.group.course21.initialWeek}}
+                  </small>
+                  <br>
+                  <small>
+                    Semana Final {{event.group.group.course21.initialWeek + event.group.group.course21.weeks - 1}}
+                  </small>
+                  <br>
+                  <small>
+                    Duración {{event.group.group.course21.weeks}}
+                  </small>
+                  <br>
+                  <small>
+                    {{event.startTimeString}} - {{event.endTimeString}}
+                  </small>
+                  <br>
+                  <ng-container *ngFor="let cursor of event.professors">
+                    <small>
+                      {{ cursor.professor.nomina }} - {{ cursor.professor.name }}
+                    </small>
+                    <br>
+                  </ng-container>
+                  <br>
+                  <button nz-button nzType="danger" nzGhost nzSize="small" nzBlock (click)="deleteModule(event)">Eliminar
+                    Grupo</button>
+                </ng-template>
+              </ng-container>
+            <ng-template #course>
+              <small style="cursor: pointer;" nz-popover
+                [nzPopoverTitle]="event.group.course.key + ' - ' + event.group.course.name"
+                [nzPopoverContent]="popoverContent"
+                nzPopoverTrigger="hover"><a>{{event.group.course.key + ' - Grupo ' + event.group.number}}</a></small>
+              <ng-template #popoverContent>
+                <small>
+                  Grupo {{event.group.number}}
+                </small>
+                <br>
+                <small>
+                  {{event.startTimeString}} - {{event.endTimeString}}
+                </small>
+                <br>
+                <small>
+                  Semana Inicial: {{event.group.course.initialWeek}}
+                </small>
+                <br>
+                <small>
+                  Semana Final: {{event.group.course.initialWeek + event.group.course.weeks - 1}}
+                </small>
+                <br>
+                <small>
+                  Duración: {{event.group.course.weeks}} semanas
+                </small>
+                <br>
+                <ng-container *ngFor="let cursor of event.professors">
+                  <small>
+                    {{ cursor.professor.nomina }} - {{ cursor.professor.name }}
+                  </small>
+                  <br>
+                </ng-container>
+                <br>
+                <button nz-button nzType="danger" nzGhost nzSize="small" nzBlock (click)="deleteGroup(event)">Eliminar
+                  Grupo</button>
+              </ng-template>
+            </ng-template>
+          </ng-container>
+        </td>
+      </ng-container>
+    </tr>
+  </tbody>
+</nz-table>

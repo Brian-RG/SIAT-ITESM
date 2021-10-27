@@ -131,5 +131,8 @@
       }
     }
   },
-  "defaultProject": "siat"
+  "defaultProject": "siat",
+  "cli": {
+    "analytics": "cbe7a88c-f07f-488d-96e8-d81e347f1ccc"
+  }
 }

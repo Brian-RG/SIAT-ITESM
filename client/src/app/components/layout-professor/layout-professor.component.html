@@ -1,0 +1,38 @@
+<nz-layout class="app-layout">
+    <nz-sider class="menu-sidebar" nzCollapsible nzWidth="256px" nzBreakpoint="md" [(nzCollapsed)]="isCollapsed"
+      [nzTrigger]="null" nzTheme="light">
+      <div class="sidebar-logo">
+        <a>
+          <img src="assets/images/logo-tec.png" alt="logo" style="border-radius: 100%;">
+          <h1>SIAT</h1>
+        </a>
+      </div>
+      <ul nz-menu nzTheme="light" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
+        <li nz-menu-item [routerLink]="'/dashboard/periodos'" nzMatchRouter>
+          <i nz-icon nzType="idcard" nzTheme="fill"></i>
+          <span>Mis horarios</span>
+        </li>
+      </ul>
+    </nz-sider>
+    <nz-layout>
+      <nz-header>
+        <div class="app-header">
+          <span class="header-trigger" (click)="isCollapsed = !isCollapsed">
+            <i class="trigger" nz-icon [nzType]="isCollapsed ? 'menu-unfold' : 'menu-fold'"></i>
+          </span>
+          <span class="header-trigger" style="float:right;">
+            <i class="trigger" nz-icon nzType="user" nz-popover nzPopoverTrigger="click" [nzPopoverContent]="contentTemplate" nzPopoverPlacement="bottomRight"></i>
+          </span>
+          <ng-template #contentTemplate>
+            <button nz-button nzType="danger" (click)="logout()">Cerrar Sesión</button>
+          </ng-template>
+        </div>
+      </nz-header>
+      <nz-content>
+        <div class="inner-content">
+          <router-outlet></router-outlet>
+        </div>
+      </nz-content>
+    </nz-layout>
+  </nz-layout>
+  
