@@ -56,7 +56,4 @@ export class ClassroomsEntity {
     nullable: false,
   })
   status: string;
-
-  @ManyToOne(() => UsersEntity, (UsersEntity) => UsersEntity.classrooms)
-  user: UsersEntity;
 }

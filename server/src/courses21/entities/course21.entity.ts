@@ -6,8 +6,6 @@ import { BloqueGroupsEntity } from '../../bloque-groups/entity/bloqueGroups.enti
 
 @Entity('courses21')
 export class Course21Entity extends BaseCourseEntity {
-  @ManyToOne(() => UsersEntity, (UsersEntity) => UsersEntity.courses21)
-  user: UsersEntity;
 
   @ManyToMany(() => ModuleEntity, { cascade: true })
   @JoinTable()

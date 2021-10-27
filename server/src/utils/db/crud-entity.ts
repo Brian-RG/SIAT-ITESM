@@ -3,6 +3,37 @@ import { FindConditions, FindOneOptions, ObjectID, Repository } from 'typeorm';
 import { HttpStatus } from '@nestjs/common';
 import { ResponseStatus } from '../interfaces/response';
 
+
+/**
+ * Creates a new entity with a relationship with the user.
+ * @param typeRepository The TypeORM repository of the entity to be created.
+ * @param data The dto of the entity.
+ * @returns A ResponseStatus to send back to the user.
+ */
+async function create<TypeEntity, TypeDto>(
+  typeRepository: Repository<TypeEntity>,
+  data: TypeDto[],
+) : Promise<ResponseStatus>{
+  if (data.length == 0) {
+    return createResponseStatus(
+      HttpStatus.NO_CONTENT,
+      'No create data was provided.',
+    );
+  }
+  const resultEntities = [];
+  for (let i = 0; i < data.length; i++) {
+    // Create new entity object with the provided information.
+    const newEntity = typeRepository.create(data[i]);
+    resultEntities.push(newEntity);
+    await typeRepository.save(newEntity);
+  }
+  return createResponseStatus(
+    HttpStatus.CREATED,
+    'Created successfully.',
+    resultEntities,
+  );
+}
+
 /**
  * Creates a new entity with a relationship with the user.
  * @param userRepository The TypeORM repository of UsersEntity.
@@ -13,7 +44,7 @@ import { ResponseStatus } from '../interfaces/response';
  * @param userAttribute The name of the attribute of the entity in the user entity.
  * @returns A ResponseStatus to send back to the user.
  */
-async function createWithUserRelation<TypeEntity, TypeDto>(
+async function createWithUserRelationS<TypeEntity, TypeDto>(
   userRepository: Repository<UsersEntity>,
   typeRepository: Repository<TypeEntity>,
   uuid: string,
@@ -100,19 +131,31 @@ async function createWithRelation<TypeEntity, TypeDto, TypeParentEntity>(
  * @param relations The entity relationships to be fetched from the database.
  * @returns A response to send back to the user with the result.
  */
-async function findAll(
+async function findAllS(
   uuid: string,
   userEntityAttrName: string,
   userRepository: Repository<UsersEntity>,
   relations: string[],
 ): Promise<ResponseStatus> {
-  const user = await getUserWithEntities(uuid, relations, userRepository);
+  const user = await getUserWithEntitiesS(uuid, relations, userRepository);
   return createResponseStatus(
     HttpStatus.OK,
     'Searched user data successfully.',
     user[userEntityAttrName],
   );
 }
+
+async function findAll<TypeEntity>(
+  repository: Repository<TypeEntity>,
+): Promise<ResponseStatus> {
+  const data = await repository.find();
+  return createResponseStatus(
+    HttpStatus.OK,
+    'Searched data successfully.',
+    data,
+  );
+}
+
 
 async function findOne<Type>(
   id: string,
@@ -139,7 +182,7 @@ async function findOne<Type>(
  * @param joinRelation OPTIONAL. Condition of relation to JOIN.
  * @returns The entities that were found given the conditions.
  */
-async function findWithCondition<TypeEntity>(
+async function findWithConditionS<TypeEntity>(
   uuid: string,
   typeRepository: Repository<TypeEntity>,
   entityName: string,
@@ -162,6 +205,26 @@ async function findWithCondition<TypeEntity>(
   );
 }
 
+async function findWithCondition<TypeEntity>(
+  typeRepository: Repository<TypeEntity>,
+  entityName: string,
+  condition: string,
+  joinRelation?: string,
+): Promise<ResponseStatus> {
+  const builder = typeRepository.createQueryBuilder(entityName);
+  if (joinRelation != null) {
+    builder.leftJoinAndSelect(joinRelation, 'alias1');
+  }
+  const entities = await builder
+    .where(`${condition}`)
+    .getMany();
+  return createResponseStatus(
+    HttpStatus.OK,
+    `Searched ${entityName} data successfully`,
+    entities,
+  );
+}
+
 /**
  * Updates an entity that belongs to a user.
  * @param userId The ID of the user.
@@ -170,7 +233,7 @@ async function findWithCondition<TypeEntity>(
  * @param typeRepository The TypeORM repository of the entity.
  * @returns A ResponseStatus that states de success or failure of the operation.
  */
-async function update<TypeEntity, TypeDto>(
+async function updateS<TypeEntity, TypeDto>(
   userId: string,
   entityId: string,
   dto: TypeDto,
@@ -178,7 +241,7 @@ async function update<TypeEntity, TypeDto>(
   findOptions: FindOneOptions,
 ) {
   const toUpdate = await typeRepository.findOne(findOptions);
-  const idRetrieved = await getEntityUserId(entityId, typeRepository);
+  const idRetrieved = await getEntityUserIdS(entityId, typeRepository);
   // Check if the object exists.
   if (toUpdate) {
     // Check if the object belongs to the user.
@@ -202,6 +265,31 @@ async function update<TypeEntity, TypeDto>(
   );
 }
 
+async function update<TypeEntity, TypeDto>(
+  entityId: string,
+  dto: TypeDto,
+  typeRepository: Repository<TypeEntity>,
+  findOptions: FindOneOptions,
+) {
+  const toUpdate = await typeRepository.findOne(findOptions);
+  // Check if the object exists.
+  if (toUpdate) {
+    const updated = Object.assign(toUpdate, dto);
+    const newValue = await typeRepository.save(updated);
+    return createResponseStatus(
+      HttpStatus.OK,
+      'Updated successfully.',
+      newValue,
+    );
+  }
+  return createResponseStatus(
+    HttpStatus.NOT_FOUND,
+    'Entity to update has not been found.',
+  );
+}
+
+
+
 /**
  * Removes an entity from the database.
  * @param userId The ID of the user.
@@ -210,7 +298,7 @@ async function update<TypeEntity, TypeDto>(
  * @param deleteCondition The condition used to search the entity to be deleted.
  * @returns A response stating success or failure of the operation.
  */
-async function remove<TypeEntity>(
+async function removeS<TypeEntity>(
   userId: string,
   entityId: string,
   typeRepository: Repository<TypeEntity>,
@@ -225,7 +313,7 @@ async function remove<TypeEntity>(
     | ObjectID[]
     | FindConditions<TypeEntity>,
 ): Promise<ResponseStatus> {
-  const idRetrieved = await getEntityUserId<TypeEntity>(
+  const idRetrieved = await getEntityUserIdS<TypeEntity>(
     entityId,
     typeRepository,
   );
@@ -247,6 +335,37 @@ async function remove<TypeEntity>(
   );
 }
 
+
+async function remove<TypeEntity>(
+  entityId: string,
+  typeRepository: Repository<TypeEntity>,
+  deleteCondition:
+    | string
+    | string[]
+    | number
+    | number[]
+    | Date
+    | Date[]
+    | ObjectID
+    | ObjectID[]
+    | FindConditions<TypeEntity>,
+): Promise<ResponseStatus> {
+  // Verify that the object exists.
+
+  const to_delete = typeRepository.findOne(entityId);
+
+  if (to_delete) {
+    await typeRepository.delete(deleteCondition);
+    return createResponseStatus(HttpStatus.OK, 'Successfully deleted.');
+  }
+  return createResponseStatus(
+    HttpStatus.NOT_FOUND,
+    'Entity to delete has not been found.',
+  );
+}
+
+
+
 /**
  * Gets the user information with the provided relationship populated.
  * @param uuid The id of the user.
@@ -254,7 +373,7 @@ async function remove<TypeEntity>(
  * @param userRepository An TypeORM repository object of UsersEntity.
  * @returns An UsersEntity object populated.
  */
-async function getUserWithEntities(
+async function getUserWithEntitiesS(
   uuid: string,
   relations: string[],
   userRepository: Repository<UsersEntity>,
@@ -271,7 +390,7 @@ async function getUserWithEntities(
  * @param entityId ID of the entity
  * @returns The id of the user or null if the relation is not present.
  */
-async function getEntityUserId<TypeRepo>(
+async function getEntityUserIdS<TypeRepo>(
   entityId: string,
   entityRepository: Repository<TypeRepo>,
 ): Promise<string> {
@@ -310,8 +429,9 @@ async function createResponseStatus(
 }
 
 export {
+  create,
   createResponseStatus,
-  createWithUserRelation,
+  createWithUserRelationS,
   createWithRelation,
   findAll,
   findOne,

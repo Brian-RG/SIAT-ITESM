@@ -24,6 +24,11 @@ export class CoursesService {
    * @returns A response to send back to the user with the new courses created.
    */
   async create(data: CreateCourseReq, uuid: string): Promise<ResponseStatus> {
+    return db.create<CourseEntity, Course20Dto>(
+      this.coursesRepository,
+      data.courses,
+    );
+    /*
     return db.createWithUserRelation<CourseEntity, Course20Dto>(
       this.userRepository,
       this.coursesRepository,
@@ -32,6 +37,7 @@ export class CoursesService {
       data.courses,
       'courses',
     );
+    */
   }
 
   /**
@@ -40,7 +46,8 @@ export class CoursesService {
    * @returns The TEC 20 courses.
    */
   async findAll(uuid: string): Promise<ResponseStatus> {
-    return db.findAll(uuid, 'courses', this.userRepository, ['courses']);
+    return db.findAll<CourseEntity>(this.coursesRepository);
+    //return db.findAll(uuid, 'courses', this.userRepository, ['courses']);
   }
 
   /**
@@ -56,12 +63,17 @@ export class CoursesService {
     updateCourseDto: Course20Dto,
   ): Promise<ResponseStatus> {
     return db.update<CourseEntity, Course20Dto>(
+      courseId, updateCourseDto, this.coursesRepository, {where: {id: courseId}}
+    );
+    /*
+    return db.update<CourseEntity, Course20Dto>(
       userId,
       courseId,
       updateCourseDto,
       this.coursesRepository,
       { where: { id: courseId } },
     );
+    */
   }
 
   /**
@@ -71,9 +83,12 @@ export class CoursesService {
    * @returns A response stating success or failure.
    */
   async remove(userId: string, courseId: string): Promise<ResponseStatus> {
+    return db.remove(courseId, this.coursesRepository, {id:courseId});
+    /*
     return db.remove(userId, courseId, this.coursesRepository, {
       id: courseId,
     });
+    */
   }
 
   /**

@@ -37,14 +37,19 @@ export class AvenueService {
 
     avenueReq.avenues = avenues;
 
-    return await db.createWithUserRelation<AvenueEntity, AvenueDto>(
+    return await db.create<AvenueEntity, AvenueDto>(
+      this.avenueRepository,
+      avenueReq.avenues
+    );
+    
+    /*return await db.createWithUserRelation<AvenueEntity, AvenueDto>(
       this.userRepository,
       this.avenueRepository,
       uuid,
       ['avenues'],
       avenueReq.avenues,
       'avenues',
-    );
+    );*/
   }
 
   /**
@@ -53,7 +58,8 @@ export class AvenueService {
    * @returns A response with the result of the lookup in the DB.
    */
   async findAll(uuid: string): Promise<ResponseStatus> {
-    return db.findAll(uuid, 'avenues', this.userRepository, ['avenues']);
+    return db.findAll<AvenueEntity>(this.avenueRepository);
+    /*return db.findAll(uuid, 'avenues', this.userRepository, ['avenues']);*/
   }
 
   /**
@@ -68,13 +74,22 @@ export class AvenueService {
     moduleId: string,
     updateAvenueDto: AvenueDto,
   ): Promise<ResponseStatus> {
+    
     return db.update<AvenueEntity, AvenueDto>(
+      moduleId,
+      updateAvenueDto,
+      this.avenueRepository,
+      {where:{id:moduleId}},
+    );
+
+    /*return db.update<AvenueEntity, AvenueDto>(
       userId,
       moduleId,
       updateAvenueDto,
       this.avenueRepository,
       { where: { id: moduleId } },
     );
+    */
   }
 
   /**
@@ -84,6 +99,7 @@ export class AvenueService {
    * @returns A response stating success or failure.
    */
   async remove(userId: string, avenueId: string): Promise<ResponseStatus> {
-    return db.remove(userId, avenueId, this.avenueRepository, { id: avenueId });
+    return db.remove(avenueId, this.avenueRepository, {id:avenueId});
+    //return db.remove(userId, avenueId, this.avenueRepository, { id: avenueId });
   }
 }
