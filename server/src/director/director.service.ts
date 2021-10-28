@@ -6,14 +6,15 @@ import { DirectorDto } from './dto/director.dto';
 import { DirectorEntity } from './entity/director.entity';
 import { ResponseStatus } from '../utils/interfaces/response';
 import * as db from '../utils/db/crud-entity';
-import { CreateProfessorsReq } from './interfaces/createProfessorsReq';
-import { UpdateProfessorDto } from './dto/update-professor.dto';
+import { CreateDirectorReq } from './interfaces/createDirectorReq';
+import { UpdateDirectorDto } from './dto/update-director.dto';
 import { AvailableReq } from './interfaces/availableReq.interface';
 import { EventsService } from '../events/events.service';
 
 @Injectable()
 export class DirectorService {
-  constructor(
+  //constructor(
+    /*
     @InjectRepository(DirectorEntity)
     private professorsRepository: Repository<DirectorEntity>,
     @InjectRepository(UsersEntity)
@@ -27,6 +28,7 @@ export class DirectorService {
    * @param uuid The uuid of the user.
    * @returns A response to send back to the user with the new professors data.
    */
+  /*
   async create(
     createReq: CreateProfessorsReq,
     uuid: string,
@@ -46,6 +48,7 @@ export class DirectorService {
    * @param uuid The user ID.
    * @returns A response with the result of the lookup in the DB.
    */
+  /*
   async findAll(uuid: string): Promise<ResponseStatus> {
     return db.findAll(uuid, 'director', this.userRepository, ['professors']);
   }
@@ -55,6 +58,7 @@ export class DirectorService {
    * @param uuid The user ID.
    * @returns A response with the result of the lookup in the DB.
    */
+  /*
   async findAvailable(
     uuid: string,
     data: AvailableReq,
@@ -83,6 +87,7 @@ export class DirectorService {
    * @param updateProfessorDto The data to be replaced.
    * @returns A response with the new value as a result.
    */
+  /*
   async update(
     userId: string,
     professorId: string,
@@ -103,6 +108,7 @@ export class DirectorService {
    * @param professorId The ID of the professor to be deleted.
    * @returns A resposne stating success or failure.
    */
+  /*
   async remove(userId: string, professorId: string): Promise<ResponseStatus> {
     return db.remove(userId, professorId, this.professorsRepository, {
       id: professorId,
@@ -115,6 +121,7 @@ export class DirectorService {
    * @param periodId The UUID of the period.
    * @returns The professor data separated by TEC 20 and TEC 21.
    */
+  /*
   async getProfessorPeriodDataTec20(uuid: string, periodId: string) {
     const tec20Info = await this.professorsRepository
       .createQueryBuilder('professor')
@@ -155,6 +162,7 @@ export class DirectorService {
    * @param periodId The UUID of the period.
    * @returns The professor data separated by TEC 20 and TEC 21.
    */
+  /*
   async getProfessorPeriodDataTec21(uuid: string, periodId: string) {
     const tec21Info = await this.professorsRepository
       .createQueryBuilder('professor')
@@ -189,5 +197,6 @@ export class DirectorService {
       .addGroupBy('course21.weeks')
       .getRawMany();
     return tec21Info;
-  }
+    */
+  //}
 }
