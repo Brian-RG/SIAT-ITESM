@@ -37,7 +37,7 @@ export class AuthService {
         if (response.status.statusCode === 200 && response.result?.access_token) {
           this.apiService.setAccessToken(response.result.access_token);
           this.storageService.setProperty(environment.TOKEN_KEY, response.result.access_token);
-          this.router.navigate(['/dashboard/periodos']);
+          this.router.navigate(['/dashboard-admin/periodos']);
           callback({loading: false});
           this.nzMessageService.success('Bienvenido a SIAT');
         } else if (response.status.statusCode === 401){

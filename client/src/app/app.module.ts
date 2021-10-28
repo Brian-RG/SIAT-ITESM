@@ -17,6 +17,7 @@ import { LayoutComponent } from './components/layout/layout.component';
 import { LayoutProfessorComponent } from './components/layout-professor/layout-professor.component';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzButtonModule, NzPopoverModule } from 'ng-zorro-antd';
+import { LayoutAdminComponent } from './components/layout-admin/layout-admin.component';
 
 registerLocaleData(es);
 
@@ -24,7 +25,8 @@ registerLocaleData(es);
   declarations: [
     AppComponent,
     LayoutComponent,
-    LayoutProfessorComponent
+    LayoutProfessorComponent,
+    LayoutAdminComponent
   ],
   imports: [
     BrowserModule,

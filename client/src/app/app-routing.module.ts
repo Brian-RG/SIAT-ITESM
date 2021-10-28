@@ -8,12 +8,17 @@ const routes: Routes = [
     path: '',
     pathMatch: 'full',
     canActivate: [AuthGuard],
-    redirectTo: '/dashboard/periodos'
+    redirectTo: '/dashboard-admin/usuarios'
   },
   {
     path: 'dashboard',
     loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'dashboard-admin',
+    loadChildren: () => import('./pages/dashboard-admin/dashboard-admin.module').then(m => m.DashboardAdminModule),
+    canActivate: [AuthGuard]
   },
   {
     path: 'login',
