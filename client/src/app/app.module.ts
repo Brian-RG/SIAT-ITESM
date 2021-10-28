@@ -14,6 +14,7 @@ import { es_ES } from 'ng-zorro-antd/i18n';
 import { registerLocaleData } from '@angular/common';
 import es from '@angular/common/locales/es';
 import { LayoutComponent } from './components/layout/layout.component';
+import { LayoutProfessorComponent } from './components/layout-professor/layout-professor.component';
 import { NzMessageModule } from 'ng-zorro-antd/message';
 import { NzButtonModule, NzPopoverModule } from 'ng-zorro-antd';
 
@@ -22,7 +23,8 @@ registerLocaleData(es);
 @NgModule({
   declarations: [
     AppComponent,
-    LayoutComponent
+    LayoutComponent,
+    LayoutProfessorComponent
   ],
   imports: [
     BrowserModule,
