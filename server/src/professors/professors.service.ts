@@ -31,7 +31,13 @@ export class ProfessorsService {
     createReq: CreateProfessorsReq,
     uuid: string,
   ): Promise<ResponseStatus> {
-    return db.createWithUserRelation<ProfessorsEntity, ProfessorDto>(
+
+    return db.create<ProfessorsEntity, ProfessorDto>(
+      this.professorsRepository,
+      createReq.professors,
+    ); 
+    
+    /*return db.createWithUserRelation<ProfessorsEntity, ProfessorDto>(
       this.userRepository,
       this.professorsRepository,
       uuid,
@@ -39,6 +45,8 @@ export class ProfessorsService {
       createReq.professors,
       'professors',
     );
+    */
+
   }
 
   /**
@@ -47,7 +55,8 @@ export class ProfessorsService {
    * @returns A response with the result of the lookup in the DB.
    */
   async findAll(uuid: string): Promise<ResponseStatus> {
-    return db.findAll(uuid, 'professors', this.userRepository, ['professors']);
+    //return db.findAll(uuid, 'professors', this.userRepository, ['professors']);
+    return db.findAll<ProfessorsEntity>(this.professorsRepository);
   }
 
   /**
@@ -89,12 +98,20 @@ export class ProfessorsService {
     updateProfessorDto: UpdateProfessorDto,
   ): Promise<ResponseStatus> {
     return db.update<ProfessorsEntity, UpdateProfessorDto>(
+      professorId,
+      updateProfessorDto,
+      this.professorsRepository,
+      { where: { id: professorId } },
+    );
+    /*
+    return db.update<ProfessorsEntity, UpdateProfessorDto>(
       userId,
       professorId,
       updateProfessorDto,
       this.professorsRepository,
       { where: { id: professorId } },
     );
+    */
   }
 
   /**
@@ -104,9 +121,14 @@ export class ProfessorsService {
    * @returns A resposne stating success or failure.
    */
   async remove(userId: string, professorId: string): Promise<ResponseStatus> {
+    return db.remove( professorId, this.professorsRepository, {
+      id: professorId,
+    });
+    /*
     return db.remove(userId, professorId, this.professorsRepository, {
       id: professorId,
     });
+    */
   }
 
   /**

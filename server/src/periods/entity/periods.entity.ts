@@ -7,7 +7,6 @@ import {
   BeforeInsert,
   BeforeUpdate,
 } from 'typeorm';
-import { UsersEntity } from '../../users/entity/users.entity';
 import { GroupsEntity } from '../../groups/entity/groups.entity';
 import { BloqueGroupsEntity } from '../../bloque-groups/entity/bloqueGroups.entity';
 
@@ -67,9 +66,6 @@ export class PeriodsEntity {
     this.startDate = new Date(this.startDate.toString());
     this.endDate = new Date(this.endDate.toString());
   }
-
-  @ManyToOne(() => UsersEntity, (UsersEntity) => UsersEntity.periods)
-  user: UsersEntity;
 
   @OneToMany(() => GroupsEntity, (GroupsEntity) => GroupsEntity.period, {
     onDelete: 'CASCADE',

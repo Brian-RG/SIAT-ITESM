@@ -5,7 +5,6 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { UsersEntity } from '../../users/entity/users.entity';
 import { BloqueGroupModulesEntity } from '../../bloque-group-modules/entity/bloque-modules.entity';
 
 @Entity('modules')
@@ -18,9 +17,6 @@ export class ModuleEntity {
     nullable: false,
   })
   name: string;
-
-  @ManyToOne(() => UsersEntity, (UsersEntity) => UsersEntity.modules)
-  user: UsersEntity;
 
   @OneToMany(
     () => BloqueGroupModulesEntity,

@@ -27,6 +27,12 @@ export class PeriodsService {
     createPeriodDto: CreatePeriodsReq,
     uuid: string,
   ): Promise<ResponseStatus> {
+    
+    const result = await db.create<PeriodsEntity, PeriodDto>(
+      this.periodsRepository,
+      createPeriodDto.periods
+    );
+    /*
     const result = await db.createWithUserRelation<PeriodsEntity, PeriodDto>(
       this.userRepository,
       this.periodsRepository,
@@ -35,6 +41,7 @@ export class PeriodsService {
       createPeriodDto.periods,
       'periods',
     );
+    */
     if (result.result) {
       for (let i = 0; i < result.result.length; i++) {
         result.result[i] = this._periodEntityToResult(result.result[i]);
@@ -49,9 +56,14 @@ export class PeriodsService {
    * @returns A response with the result of the lookup in the DB.
    */
   async findAll(uuid: string): Promise<ResponseStatus> {
+
+    const result = await db.findAll<PeriodsEntity>(this.periodsRepository);
+    
+    /*
     const result = await db.findAll(uuid, 'periods', this.userRepository, [
       'periods',
     ]);
+    */
     if (result.result) {
       for (let i = 0; i < result.result.length; i++) {
         result.result[i] = this._periodEntityToResult(result.result[i]);
@@ -87,6 +99,15 @@ export class PeriodsService {
     periodId: string,
     periodDto: PeriodDto,
   ): Promise<ResponseStatus> {
+
+    const result = await db.update<PeriodsEntity, PeriodDto>(
+      periodId,
+      periodDto,
+      this.periodsRepository,
+      { where: { id: periodId } },
+    );
+    
+    /*
     const result = await db.update<PeriodsEntity, PeriodDto>(
       userId,
       periodId,
@@ -94,6 +115,8 @@ export class PeriodsService {
       this.periodsRepository,
       { where: { id: periodId } },
     );
+    */
+
     if (result.result) {
       result.result = this._periodEntityToResult(result.result);
     }
@@ -107,9 +130,14 @@ export class PeriodsService {
    * @returns A status message stating success or failure.
    */
   async remove(userId: string, periodId: string): Promise<ResponseStatus> {
+    return db.remove<PeriodsEntity>( periodId, this.periodsRepository, {
+      id: periodId,
+    });    
+    /*
     return db.remove<PeriodsEntity>(userId, periodId, this.periodsRepository, {
       id: periodId,
     });
+    */
   }
 
   /**

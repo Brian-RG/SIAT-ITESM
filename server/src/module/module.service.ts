@@ -27,6 +27,12 @@ export class ModuleService {
     moduleReq: CreateModuleReq,
     uuid: string,
   ): Promise<ResponseStatus> {
+    return db.create<ModuleEntity, ModuleDto>(
+      this.moduleRepository,
+      moduleReq.modules,
+    );
+    
+    /*
     return await db.createWithUserRelation<ModuleEntity, ModuleDto>(
       this.userRepository,
       this.moduleRepository,
@@ -35,6 +41,7 @@ export class ModuleService {
       moduleReq.modules,
       'modules',
     );
+    */
   }
 
   /**
@@ -43,7 +50,8 @@ export class ModuleService {
    * @returns A response with the result of the lookup in the DB.
    */
   async findAll(uuid: string): Promise<ResponseStatus> {
-    return db.findAll(uuid, 'modules', this.userRepository, ['modules']);
+    return db.findAll(this.moduleRepository);
+    //return db.findAll(uuid, 'modules', this.userRepository, ['modules']);
   }
 
   /**
@@ -58,13 +66,22 @@ export class ModuleService {
     moduleId: string,
     updateModuleDto: ModuleDto,
   ): Promise<ResponseStatus> {
+    
     return db.update<ModuleEntity, ModuleDto>(
+      moduleId,
+      updateModuleDto,
+      this.moduleRepository,
+      { where: { id: moduleId } },
+    );
+
+    /*return db.update<ModuleEntity, ModuleDto>(
       userId,
       moduleId,
       updateModuleDto,
       this.moduleRepository,
       { where: { id: moduleId } },
     );
+    */
   }
 
   /**
@@ -74,6 +91,8 @@ export class ModuleService {
    * @returns A response stating success or failure.
    */
   async remove(userId: string, moduleId: string): Promise<ResponseStatus> {
-    return db.remove(userId, moduleId, this.moduleRepository, { id: moduleId });
+    return db.remove(moduleId, this.moduleRepository, { id: moduleId });
+    
+    //return db.remove(userId, moduleId, this.moduleRepository, { id: moduleId });
   }
 }

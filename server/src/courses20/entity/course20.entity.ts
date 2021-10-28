@@ -9,10 +9,6 @@ export class CourseEntity extends BaseCourseEntity {
     nullable: false,
   })
   udc: number;
-
-  @ManyToOne(() => UsersEntity, (UsersEntity) => UsersEntity.courses)
-  user: UsersEntity;
-
   @OneToMany(() => GroupsEntity, (GroupsEntity) => GroupsEntity.course)
   groups: GroupsEntity[];
 }

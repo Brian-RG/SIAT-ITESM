@@ -11,7 +11,4 @@ export class AvenueEntity {
     nullable: false,
   })
   name: string;
-
-  @ManyToOne(() => UsersEntity, (UsersEntity) => UsersEntity.modules)
-  user: UsersEntity;
 }
