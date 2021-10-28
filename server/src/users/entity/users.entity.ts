@@ -45,31 +45,4 @@ export class UsersEntity {
   @BeforeInsert() async hashPassword() {
     this.password = await securityUtils.hashPass(this.password);
   }
-
-  @OneToMany(() => CourseEntity, (CourseEntity) => CourseEntity.user)
-  courses: CourseEntity[];
-
-  @OneToMany(() => Course21Entity, (Course21Entity) => Course21Entity.user)
-  courses21: Course21Entity[];
-
-  @OneToMany(
-    () => ClassroomsEntity,
-    (ClassroomsEntity) => ClassroomsEntity.user,
-  )
-  classrooms: ClassroomsEntity[];
-
-  @OneToMany(
-    () => ProfessorsEntity,
-    (ProfessorsEntity) => ProfessorsEntity.user,
-  )
-  professors: ProfessorsEntity[];
-
-  @OneToMany(() => PeriodsEntity, (PeriodsEntity) => PeriodsEntity.user)
-  periods: ProfessorsEntity[];
-
-  @OneToMany(() => ModuleEntity, (ModuleEntity) => ModuleEntity.user)
-  modules: ModuleEntity[];
-
-  @OneToMany(() => AvenueEntity, (AvenueEntity) => AvenueEntity.user)
-  avenues: AvenueEntity[];
 }

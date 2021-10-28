@@ -4,7 +4,7 @@ module.exports = {
   "port": 5432,
   "username": "siat",
   "password": "testpass",
-  "database": "siat-tec",
+  "database": "siat-tec-nueva",
   "entities": ["dist/**/*.entity{.ts,.js}"],
   "synchronize": true
 };

@@ -40,6 +40,11 @@ export class ClassroomsService {
     createReq: CreateClassroomsReq,
     uuid: string,
   ): Promise<ResponseStatus> {
+    return db.create<ClassroomsEntity, ClassroomDto>(
+      this.classroomsRepository,
+      createReq.classrooms
+    );
+    /*
     return db.createWithUserRelation<ClassroomsEntity, ClassroomDto>(
       this.userRepository,
       this.classroomsRepository,
@@ -48,6 +53,7 @@ export class ClassroomsService {
       createReq.classrooms,
       'classrooms',
     );
+    */
   }
 
   /**
@@ -56,7 +62,10 @@ export class ClassroomsService {
    * @returns A response with the result of the lookup in the DB.
    */
   async findAll(uuid: string): Promise<ResponseStatus> {
-    return db.findAll(uuid, 'classrooms', this.userRepository, ['classrooms']);
+    
+    return db.findAll<ClassroomsEntity>(this.classroomsRepository);
+    
+    //return db.findAll(uuid, 'classrooms', this.userRepository, ['classrooms']);
   }
 
   /**
@@ -172,6 +181,14 @@ export class ClassroomsService {
     classroomId: string,
     updateClassroomDto: UpdateClassroomDto,
   ): Promise<ResponseStatus> {
+    
+    return db.update<ClassroomsEntity, UpdateClassroomDto>(
+      classroomId,
+      updateClassroomDto,
+      this.classroomsRepository,
+      {where: {id:classroomId}},
+    );
+    /*
     return db.update<ClassroomsEntity, UpdateClassroomDto>(
       userId,
       classroomId,
@@ -179,6 +196,7 @@ export class ClassroomsService {
       this.classroomsRepository,
       { where: { id: classroomId } },
     );
+    */
   }
 
   /**
@@ -188,8 +206,12 @@ export class ClassroomsService {
    * @returns A response stating success or failure.
    */
   async remove(userId: string, classroomId: string): Promise<ResponseStatus> {
+    
+    return db.remove(classroomId, this.classroomsRepository, {id: classroomId});
+    /*
     return db.remove(userId, classroomId, this.classroomsRepository, {
       id: classroomId,
     });
+    */
   }
 }

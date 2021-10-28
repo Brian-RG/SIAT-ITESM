@@ -45,6 +45,13 @@ export class Courses21Service {
       }
       coursesWithModules.push(newCourse);
     }
+
+    return db.create<Course21Entity, Course21Dto>(
+      this.coursesRepository,
+      coursesWithModules
+    );
+    
+    /*
     return db.createWithUserRelation<Course21Entity, Course21Dto>(
       this.userRepository,
       this.coursesRepository,
@@ -53,6 +60,7 @@ export class Courses21Service {
       coursesWithModules,
       'courses21',
     );
+    */
   }
 
   /**
@@ -61,10 +69,15 @@ export class Courses21Service {
    * @returns The courses that are modules or bloques.
    */
   async findAll(uuid: string): Promise<ResponseStatus> {
+    return db.findAll<Course21Entity>(this.coursesRepository);
+
+    /*
     return db.findAll(uuid, 'courses21', this.userRepository, [
       'courses21',
       'courses21.modules',
     ]);
+    */
+
   }
 
   /**
@@ -87,6 +100,15 @@ export class Courses21Service {
         'Not a valid module id was found for one of the courses',
       );
     }
+
+    return db.update<Course21Entity, Course21Dto>(
+      courseId,
+      newCourse,
+      this.coursesRepository,
+      { where: { id: courseId }, relations: ['modules'] },
+    );
+
+    /*
     return db.update<Course21Entity, Course21Dto>(
       userId,
       courseId,
@@ -94,6 +116,7 @@ export class Courses21Service {
       this.coursesRepository,
       { where: { id: courseId }, relations: ['modules'] },
     );
+    */
   }
 
   /**
@@ -103,9 +126,14 @@ export class Courses21Service {
    * @returns A response stating success or failure.
    */
   async remove(userId: string, courseId: string): Promise<ResponseStatus> {
+    return db.remove(courseId, this.coursesRepository, {
+      id: courseId,
+    });
+    /*
     return db.remove(userId, courseId, this.coursesRepository, {
       id: courseId,
     });
+    */
   }
 
   /**

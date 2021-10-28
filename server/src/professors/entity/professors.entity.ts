@@ -5,7 +5,6 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm';
-import { UsersEntity } from '../../users/entity/users.entity';
 import { ProfessorsToGroups } from '../../professorsToGroups/entity/professorsToGroups.entity';
 import { ProfessorsToBloqueModules } from '../../professorsToBloqueModules/entity/professorsToBloqueModules.entity';
 
@@ -45,9 +44,6 @@ export class ProfessorsEntity {
     nullable: false,
   })
   loadLimit: number;
-
-  @ManyToOne(() => UsersEntity, (UsersEntity) => UsersEntity.professors)
-  user: UsersEntity;
 
   @OneToMany(
     () => ProfessorsToGroups,
