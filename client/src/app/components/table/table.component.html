@@ -38,9 +38,9 @@
                   </ng-template>
                 </ng-container>
                 <td colspan="1" *ngIf="hasActions" nzRight>
-                  <a (click)="editRow(data)">Editar</a>
+                  <a *ngIf="hasEditButton" (click)="editRow(data)">Editar</a>
                   <nz-divider nzType="vertical"></nz-divider>
-                  <a (click)="deleteRow(data.id)" style="color: #ff4d4f">Borrar</a>
+                  <a *ngIf="hasDeleteButton" (click)="deleteRow(data.id)" style="color: #ff4d4f">Borrar</a>
                   <ng-container *ngIf="hasOpenButton">
                     <nz-divider nzType="vertical"></nz-divider>
                     <button nz-button nzType="primary" (click)="openElementEvent(data)">Abrir</button>

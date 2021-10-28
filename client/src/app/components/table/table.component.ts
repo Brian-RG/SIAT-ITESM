@@ -16,6 +16,8 @@ export class TableComponent implements OnInit, OnChanges {
   @Input() hasSearchBar = true;
   @Input() loading: boolean;
   @Input() hasOpenButton: boolean;
+  @Input() hasEditButton: boolean = true;
+  @Input() hasDeleteButton: boolean = true;
   dataCopy: any;
   searchValue: any;
   sortFunction: any;
