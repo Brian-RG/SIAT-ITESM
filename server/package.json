@@ -1,7 +1,7 @@
 {
   "name": "server",
   "version": "0.0.1",
-  "description": "",
+  "description": "- [NestJS (Version 7.6)](https://docs.nestjs.com/#installation)\r - [Postgresql](https://www.postgresql.org/)",
   "author": "",
   "private": true,
   "license": "UNLICENSED",
@@ -85,5 +85,9 @@
     ],
     "coverageDirectory": "../coverage",
     "testEnvironment": "node"
+  },
+  "main": ".eslintrc.js",
+  "directories": {
+    "test": "test"
   }
 }
