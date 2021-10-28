@@ -1,1 +1,39 @@
-<p>compose-user-admin works!</p>
+<form nz-form [formGroup]="userForm" class="user-form">
+    <nz-form-item>
+      <nz-form-label nzRight [nzSpan]="6" nzRequired nzFor="name">Nombre</nz-form-label>
+      <nz-form-control [nzSpan]="16" nzErrorTip="El nombre del maestro es requerido...">
+        <input nz-input formControlName="name" id="name" type="text"/>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired nzFor="nomina">Nomina</nz-form-label>
+      <nz-form-control [nzSpan]="16" nzErrorTip="El número de nomina es requerido...">
+        <input nz-input formControlName="nomina" id="nomina" type="text"/>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzRequired [nzSpan]="6" nzFor="email">Correo Electrónico</nz-form-label>
+      <nz-form-control [nzSpan]="16" [nzErrorTip]="emailErrorTip">
+        <input nz-input formControlName="email" id="email" type="email"/>
+        <ng-template #emailErrorTip let-control>
+          <ng-container *ngIf="control.hasError('email')">
+            Ingresa un correo electrónico valido
+          </ng-container>
+          <ng-container *ngIf="control.hasError('required')">
+            El correo electrónico es requerido...
+          </ng-container>
+        </ng-template>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label [nzSpan]="6" nzRequired nzFor="password">Password</nz-form-label>
+        <nz-form-control [nzSpan]="16" nzErrorTip="Ingrese contraseña">
+          <input nz-input formControlName="password" id="password" type="password"/>
+        </nz-form-control>
+      </nz-form-item>
+  </form>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="cancel()">Cancelar</button>
+    <button nz-button [nzLoading]="loading" nzType="primary" (click)="saveUser()" [disabled]="!userForm.valid">Guardar Usuario</button>
+  </div>
+  

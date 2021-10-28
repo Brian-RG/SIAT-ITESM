@@ -9,6 +9,7 @@ import { Users } from 'src/app/models/users.model';
 import { ApiService } from 'src/app/services/api/api.service';
 
 import { ComposeProfessorComponent } from '../compose-professor/compose-professor.component';
+import { ComposeUserComponent } from '../compose-user-admin/compose-user-admin.component';
 
 
 @Component({
@@ -19,9 +20,10 @@ import { ComposeProfessorComponent } from '../compose-professor/compose-professo
 export class UserAdminComponent implements OnInit {
 
   public columnsToDisplay = [
+    {display: 'Correo', prop: 'email'},
     {display: 'Nomina', prop: 'nomina'},
     {display: 'Nombre', prop: 'name'},
-    //{display: 'Correo', prop: 'email'},
+    {display: 'Password', prop: 'password'},
   ];
   public users: Array<Users>;
   public loading: boolean;
@@ -32,7 +34,7 @@ export class UserAdminComponent implements OnInit {
     private nzModalService: NzModalService
   ) {
     this.loading = true;
-    this.apiService.get('/professors').subscribe(
+    this.apiService.get('/usuarios').subscribe(
       (response) => {
         this.loading = false;
         if (response.status?.statusCode === 200){
@@ -52,13 +54,27 @@ export class UserAdminComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public createProfessor(){
+  public createUser(){
     const modal = this.nzModalService.create({
-      nzTitle: 'Agregar Maestro',
-      nzContent: ComposeProfessorComponent,
+      nzTitle: 'Agregar Usuario',
+      nzContent: ComposeUserComponent,
       nzStyle: {width: '80vw'},
     });
 
+    modal.afterClose.subscribe(
+      (result) => {
+        if (result){
+          let data = [];
+          data.push(result.users);
+          this.users = [
+            ... data,
+            ...this.users
+          ]
+        }
+      }
+    );
+
+    /*
     modal.afterClose.subscribe(
       (result) => {
         if (result?.professors){
@@ -69,6 +85,7 @@ export class UserAdminComponent implements OnInit {
         }
       }
     );
+    */
   }
 
   public afterCsvSuccess(data){
@@ -81,8 +98,8 @@ export class UserAdminComponent implements OnInit {
 
   private showDeleteConfirmation(id){
     this.nzModalService.confirm({
-      nzTitle: 'Borrar Maestro',
-      nzContent: '<span style="color: red;">Seguro que deseas borrar este maestro?</span>',
+      nzTitle: 'Borrar Usuario',
+      nzContent: '<span style="color: red;">Seguro que deseas borrar este usuario?</span>',
       nzOkText: 'Borrar',
       nzOkType: 'danger',
       nzOnOk: () => {

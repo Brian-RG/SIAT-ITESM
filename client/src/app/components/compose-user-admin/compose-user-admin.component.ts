@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService, NzModalRef } from 'ng-zorro-antd';
-import { Professor } from 'src/app/models/professor.model';
+import { User } from 'src/app/models/user.model';
 import { ApiService } from 'src/app/services/api/api.service';
 
 @Component({
@@ -11,10 +11,10 @@ import { ApiService } from 'src/app/services/api/api.service';
 })
 export class ComposeUserComponent implements OnInit {
 
-  @Input() professor: Professor;
+  @Input() user: User;
   @Input() isEditing: boolean;
   public loading: boolean;
-  public professorForm: FormGroup;
+  public userForm: FormGroup;
 
   constructor(
     private apiService: ApiService,
@@ -24,7 +24,7 @@ export class ComposeUserComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    if (this.professor) {
+    if (this.user) {
       this.createFormWithProfessor();
     } else {
       this.createForm();
@@ -32,74 +32,71 @@ export class ComposeUserComponent implements OnInit {
   }
 
   private createForm(){
-    this.professorForm = this.formBuilder.group({
+    this.userForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       nomina: ['', [Validators.required]],
-      coordination: [''],
-      area: [[]],
       email: ['', [Validators.required, Validators.email]],
-      loadLimit: [null, [Validators.required]]
+      password: ['', [Validators.required]]
     });
   }
 
   private createFormWithProfessor(){
-    this.professorForm = this.formBuilder.group({
-      name: [this.professor.name, [Validators.required]],
-      nomina: [this.professor.nomina, [Validators.required]],
-      coordination: [this.professor.coordination],
-      area: [this.professor.area],
-      email: [this.professor.email, [Validators.required, Validators.email]],
-      loadLimit: [this.professor.loadLimit, [Validators.required]]
+    this.userForm = this.formBuilder.group({
+      name: [this.user.name, [Validators.required]],
+      nomina: [this.user.nomina, [Validators.required]],
+      email: [this.user.email, [Validators.required, Validators.email]],
+      password: [this.user.password, [Validators.required]]
     });
-    this.professorForm.controls.nomina.disable();
+    this.userForm.controls.nomina.disable();
   }
 
   public cancel(){
     this.nzModalRef.destroy();
   }
 
-  public saveProfessor(){
+  public saveUser(){
     if (this.isEditing){
-      this.editProfessor();
+      this.editUser();
     } else {
-      this.createProfessor();
+      this.createUser();
     }
   }
 
-  private createProfessor(){
+  private createUser(){
     this.loading = true;
-    this.apiService.post('/professors', {professors: [this.professorForm.value]}).subscribe(
+    this.apiService.post('/auth/register', JSON.stringify(this.userForm.getRawValue())).subscribe(
       (response) => {
         this.loading = false;
         if (response.status?.statusCode === 201){
-          this.nzMessageService.success('Maestro creado con éxito');
-          this.nzModalRef.destroy({professors: response.result});
+          this.nzMessageService.success('Usuario creado con éxito');
+          this.nzModalRef.destroy({users: response.result});
         } else {
-          this.nzMessageService.error('Ocurrió un error al crear el maestro');
+          console.log(response);
+          this.nzMessageService.error('Ocurrió un error al crear el usuario');
         }
       },
       (error) => {
         this.loading = false;
-        this.nzMessageService.error('Ocurrió un error al crear el maestro');
+        this.nzMessageService.error('Ocurrió un error al crear el usuario');
       }
     );
   }
 
-  private editProfessor(){
+  private editUser(){
     this.loading = true;
-    this.apiService.put(`/professors/${this.professor.id}`, this.professorForm.value).subscribe(
+    this.apiService.put(`/usuarios/${this.user.id}`, this.userForm.value).subscribe(
       (response) => {
         this.loading = false;
         if (response.status?.statusCode === 200){
-          this.nzMessageService.success('Maestro editado con éxito');
+          this.nzMessageService.success('Usuario editado con éxito');
           this.nzModalRef.destroy({professor: response.result});
         } else {
-          this.nzMessageService.error('Ocurrió un error al editar el maestro');
+          this.nzMessageService.error('Ocurrió un error al editar el usuario');
         }
       },
       (error) => {
         this.loading = false;
-        this.nzMessageService.error('Ocurrió un error al editar el maestro');
+        this.nzMessageService.error('Ocurrió un error al editar el usuario');
       }
     );
   }
