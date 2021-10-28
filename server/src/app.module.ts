@@ -17,6 +17,9 @@ import { EventsModule } from './events/events.module';
 import { AvenueModule } from './avenue/avenue.module';
 import { ExportModule } from './export/export.module';
 import { DirectorsModule } from './directors/directors.module';
+import { UsuariosController } from './usuarios/usuarios.controller';
+import { UsuariosService } from './usuarios/usuarios.service';
+import { UsuariosModule } from './usuarios/usuarios.module';
 
 @Module({
   imports: [
@@ -41,6 +44,7 @@ import { DirectorsModule } from './directors/directors.module';
     AvenueModule,
     ExportModule,
     DirectorsModule,
+    UsuariosModule,
   ],
 })
 export class AppModule {}
