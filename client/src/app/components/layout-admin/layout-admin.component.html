@@ -8,22 +8,26 @@
         </a>
       </div>
       <ul nz-menu nzTheme="light" nzMode="inline" [nzInlineCollapsed]="isCollapsed">
-        <li nz-menu-item [routerLink]="'/dashboard-admin/periodos'" nzMatchRouter>
-          <i nz-icon nzType="idcard" nzTheme="fill"></i>
+        <li nz-menu-item [routerLink]="'/dashboardadmin/usuarios'" nzMatchRouter>
+          <i nz-icon nzType="compass" nzTheme="fill"></i>
           <span>Usuarios</span>
         </li>
-        <li nz-menu-item [routerLink]="'/dashboard-admin/periodo'" nzMatchRouter>
-            <i nz-icon nzType="idcard" nzTheme="fill"></i>
-            <span>Periodo</span>
+
+        <li nz-menu-item [routerLink]="'/dashboardadmin/avenida'" nzMatchRouter>
+            <i nz-icon nzType="compass" nzTheme="fill"></i>
+            <span>Avenidas</span>
           </li>
-          <li nz-menu-item [routerLink]="'/dashboard-admin/edificios'" nzMatchRouter>
-            <i nz-icon nzType="idcard" nzTheme="fill"></i>
-            <span>Edificios</span>
-          </li>
-          <li nz-menu-item [routerLink]="'/dashboard-admin/salones'" nzMatchRouter>
-            <i nz-icon nzType="idcard" nzTheme="fill"></i>
+
+          <li nz-menu-item [routerLink]="'/dashboardadmin/salones'" nzMatchRouter>
+            <i nz-icon nzType="compass" nzTheme="fill"></i>
             <span>Salones</span>
           </li>
+
+          <li nz-menu-item [routerLink]="'/dashboardadmin/periodos'" nzMatchRouter>
+            <i nz-icon nzType="compass" nzTheme="fill"></i>
+            <span>Periodos</span>
+          </li>
+
       </ul>
     </nz-sider>
     <nz-layout>

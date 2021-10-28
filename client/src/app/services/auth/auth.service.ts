@@ -31,13 +31,25 @@ export class AuthService {
    *
    * @param user user that is performing the log in
    */
-  public login(user: User, callback: any): void{
+  public login(user: User, callback: any, type = 'dir'): void{
+    let url : string = 'dashboard/periodos';
+    switch(type){
+      case 'admin':
+        url = 'dashboardadmin/avenida';
+        break;
+      case 'professor':
+        url = 'dashboardprofessor/horarios';
+      default:
+        url = 'dashboard/periodos';
+        break;
+
+    }
     this.apiService.post('/auth/login', {email: user.email, password: user.password}).subscribe(
       (response) => {
         if (response.status.statusCode === 200 && response.result?.access_token) {
           this.apiService.setAccessToken(response.result.access_token);
           this.storageService.setProperty(environment.TOKEN_KEY, response.result.access_token);
-          this.router.navigate(['/dashboard-admin/periodos']);
+          this.router.navigate([url]);
           callback({loading: false});
           this.nzMessageService.success('Bienvenido a SIAT');
         } else if (response.status.statusCode === 401){

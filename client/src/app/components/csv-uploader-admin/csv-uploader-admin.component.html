@@ -1,0 +1,11 @@
+<nz-upload nzAccept=".csv" [nzBeforeUpload]="beforeUpload">
+    <button nz-button><i nz-icon nzType="upload"></i>Seleccionar CSV</button>
+  </nz-upload>
+  <nz-modal [(nzVisible)]="isVisible" nzTitle="Confirmar Datos" (nzOnCancel)="handleCancel()" [nzStyle]="{width: '80vw'}">
+    <siat-table-admin [tableData]="objectToUpload" [hasActions]="false" [columns]="columns" [hasSearchBar]="false"></siat-table-admin>
+    <div *nzModalFooter>
+      <button nz-button nzType="default" (click)="handleCancel()">Cancelar</button>
+      <button nz-button nzType="primary" (click)="handleUpload()" [nzLoading]="loadingUpload">Confirmar</button>
+    </div>
+  </nz-modal>
+  

@@ -54,37 +54,37 @@ import { PeriodClassroomListComponent } from 'src/app/components/period-classroo
 import { GroupClassroomComponent } from 'src/app/components/group-classroom/group-classroom.component';
 import { GroupAssignmentComponent } from 'src/app/components/group-assignment/group-assignment.component';
 import { ScheduleTableComponent } from 'src/app/components/schedule-table/schedule-table.component';
-import { AvenuesComponent } from 'src/app/components/avenues/avenues.component';
+
+import {AvenidasComponent} from 'src/app/components/avenidas/avenidas.component';
+//import { AvenuesComponent } from 'src/app/components/avenues/avenues.component';
+
 import { ComposeAvenueComponent } from 'src/app/components/compose-avenue/compose-avenue.component';
+import { CsvUploaderAdminComponent } from 'src/app/components/csv-uploader-admin/csv-uploader-admin.component';
+import { TableAdminComponent } from 'src/app/components/table-admin/table-admin.component';
+import { ModuloPipe } from 'src/app/components/blocks/modulo.pipe';
+import { ComposeAvenidasComponent } from 'src/app/components/compose-avenidas/compose-avenidas.component';
+import { PeriodsAdminComponent } from 'src/app/components/periods-admin/periods-admin.component';
+import { ComposePeriodAdminComponent } from 'src/app/components/compose-period-admin/compose-period-admin.component';
+import { ClassroomsAdminComponent } from 'src/app/components/classrooms-admin/classrooms-admin.component';
+import { ComposeClassroomAdminComponent } from 'src/app/components/compose-classroom-admin/compose-classroom-admin.component';
+import { UserAdminComponent } from 'src/app/components/user-admin/user-admin.component';
+import { ComposeUserComponent } from 'src/app/components/compose-user-admin/compose-user-admin.component';
 
 @NgModule({
   declarations: [
     DashboardAdminComponent,
-    CsvUploaderComponent,
-    ProfessorsComponent,
-    TableComponent,
-    CoursesComponent,
-    ClassroomsComponent,
-    PeriodsComponent,
-    ComposePeriodComponent,
-    ComposeCourseComponent,
-    ComposeProfessorComponent,
-    ComposeClassroomComponent,
-    BlocksComponent,
-    ModulesComponent,
-    ComposeModuleComponent,
-    ComposeBlockComponent,
-    ModulePipe,
-    PeriodComponent,
-    Groups20Component,
-    Groups21Component,
-    ComposeGroupComponent,
-    PeriodClassroomListComponent,
-    GroupClassroomComponent,
-    GroupAssignmentComponent,
-    ScheduleTableComponent,
-    AvenuesComponent,
-    ComposeAvenueComponent
+    AvenidasComponent,
+    CsvUploaderAdminComponent,
+    TableAdminComponent,
+    ModuloPipe,
+    ComposeAvenidasComponent,
+    PeriodsAdminComponent,
+    ComposePeriodAdminComponent,
+    ClassroomsAdminComponent,
+    ComposeClassroomAdminComponent,
+    UserAdminComponent,
+    ComposeUserComponent
+    
   ],
   imports: [
     CommonModule,
@@ -113,7 +113,7 @@ import { ComposeAvenueComponent } from 'src/app/components/compose-avenue/compos
     NzCheckboxModule,
     NzTimePickerModule,
     NzInputNumberModule,
-    NzCollapseModule,
+    NzCollapseModule, 
     NzPopoverModule
   ],
 })

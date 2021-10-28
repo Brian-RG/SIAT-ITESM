@@ -8,20 +8,33 @@ const routes: Routes = [
     path: '',
     pathMatch: 'full',
     canActivate: [AuthGuard],
-    redirectTo: '/dashboard-admin/usuarios'
+    redirectTo: '/dashboardadmin/avenida'
   },
   {
     path: 'dashboard',
     loadChildren: () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
     canActivate: [AuthGuard]
   },
+  
+  
   {
-    path: 'dashboard-admin',
+    path: 'dashboardadmin',
     loadChildren: () => import('./pages/dashboard-admin/dashboard-admin.module').then(m => m.DashboardAdminModule),
     canActivate: [AuthGuard]
   },
+  
   {
     path: 'login',
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule),
+    canActivate: [GuestGuard]
+  },
+  {
+    path: 'login/:type',
+    loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule),
+    canActivate: [GuestGuard]
+  },
+  {
+    path: 'login/professor',
     loadChildren: () => import('./pages/login/login.module').then(m => m.LoginModule),
     canActivate: [GuestGuard]
   }

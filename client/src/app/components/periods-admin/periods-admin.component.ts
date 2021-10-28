@@ -1,0 +1,128 @@
+import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { NzMessageService, NzModalService } from 'ng-zorro-antd';
+import { Period } from 'src/app/models/period.model';
+import { ApiService } from 'src/app/services/api/api.service';
+import { ComposePeriodAdminComponent } from '../compose-period-admin/compose-period-admin.component';
+
+@Component({
+  selector: 'siat-periods-admin',
+  templateUrl: './periods-admin.component.html',
+  styleUrls: ['./periods-admin.component.scss']
+})
+export class PeriodsAdminComponent implements OnInit {
+
+  public columnsToDisplay = [
+    {display: 'Nombre', prop: 'name'},
+    {display: 'Fecha de inicio', prop: 'startData'},
+    {display: 'Fecha de fin', prop: 'endData'},
+    {display: 'Vacaciones', prop: 'vacations'},
+    {display: 'Intensivo', prop: 'intensive'}
+  ];
+  public loading: boolean;
+  public periods: Array<Period>;
+
+  constructor(
+    private apiService: ApiService,
+    private nzMessageService: NzMessageService,
+    private nzModalService: NzModalService,
+    private router: Router
+  ) { }
+
+  ngOnInit(): void {
+    this.loading = true;
+    this.apiService.get('/periods').subscribe(
+      (response) => {
+        this.loading = false;
+        if (response.status?.statusCode === 200){
+          this.periods = response.result;
+        } else {
+          this.nzMessageService.error('Error al cargar periodos');
+        }
+      },
+      (error) => {
+        this.loading = false;
+        this.nzMessageService.error('Error al cargar periodos');
+        console.log('Error al cargar periodos', error);
+      }
+    );
+  }
+
+  public createPeriod(){
+    const modal = this.nzModalService.create({
+      nzTitle: 'Agregar Periodo',
+      nzContent: ComposePeriodAdminComponent,
+      nzStyle: {width: '80vw'},
+    });
+
+    modal.afterClose.subscribe(
+      (result) => {
+        if (result?.periods){
+          this.periods = [
+            ...result.periods,
+            ...this.periods
+          ];
+        }
+      }
+    );
+  }
+
+  public onDelete(id){
+    this.showDeleteConfirmation(id);
+  }
+
+  private showDeleteConfirmation(id){
+    this.nzModalService.confirm({
+      nzTitle: 'Borrar Periodo',
+      nzContent: '<span style="color: red;">Seguro que deseas borrar este periodo?</span>',
+      nzOkText: 'Borrar',
+      nzOkType: 'danger',
+      nzOnOk: () => {
+        this.deletePeriod(id);
+      },
+      nzCancelText: 'Cancelar',
+    });
+  }
+
+  private deletePeriod(id){
+    this.loading = true;
+    this.apiService.delete(`/periods/${id}`).subscribe(
+      (response) => {
+        this.loading = false;
+        if (response.status?.statusCode === 200){
+          this.periods = this.periods.filter(period => period.id !== id);
+          this.nzMessageService.success('Periodo borrado con éxito');
+        } else {
+          this.nzMessageService.error('Ocurrió un error al borrar el periodo');
+        }
+      },
+      (error) => {
+        this.loading = false;
+        console.error('Ocurrió un error al borrar el periodo', error);
+        this.nzMessageService.error('Ocurrió un error al borrar el periodo');
+      }
+    );
+  }
+
+  public onEdit(data){
+    const modal = this.nzModalService.create({
+      nzTitle: 'Editar Periodo',
+      nzContent: ComposePeriodAdminComponent,
+      nzStyle: {width: '80vw'},
+      nzComponentParams: {period: data, isEditing: true}
+    });
+
+    modal.afterClose.subscribe(
+      (result) => {
+        if (result?.period){
+          const index = this.periods.findIndex(period => period.id === result.period.id);
+          Object.assign(this.periods[index], result.period);
+        }
+      }
+    );
+  }
+
+  public openPeriod(data){
+    this.router.navigate(['/dashboardadmin/periodo', data.id]);
+  }
+}

@@ -1,0 +1,8 @@
+<div nz-row nzJustify="end">
+    <siat-csv-uploader-admin [endpoint]="'/professors'" [objectPrefix]="'users'" [columns]="columnsToDisplay"
+      [areArray]="[2]" (afterSuccess)="afterCsvSuccess($event)"></siat-csv-uploader-admin>
+    <button nz-button nzType="primary" style="margin-left: 16px;" (click)="createProfessor()">Agregar Usuario</button>
+  </div>
+  <siat-table-admin [loading]="loading" [tableData]="users" [columns]="columnsToDisplay" (delete)="onDelete($event)"
+    (edit)="onEdit($event)"></siat-table-admin>
+  
