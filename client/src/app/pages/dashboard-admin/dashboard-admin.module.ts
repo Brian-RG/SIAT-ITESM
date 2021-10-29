@@ -69,6 +69,8 @@ import { ClassroomsAdminComponent } from 'src/app/components/classrooms-admin/cl
 import { ComposeClassroomAdminComponent } from 'src/app/components/compose-classroom-admin/compose-classroom-admin.component';
 import { UserAdminComponent } from 'src/app/components/user-admin/user-admin.component';
 import { ComposeUserComponent } from 'src/app/components/compose-user-admin/compose-user-admin.component';
+import { ComposeAdminComponent } from 'src/app/components/compose-admin/compose-admin.component';
+import { ComposeProfessorAdminComponent } from 'src/app/components/compose-professor-admin/compose-professor-admin.component';
 
 @NgModule({
   declarations: [
@@ -83,7 +85,9 @@ import { ComposeUserComponent } from 'src/app/components/compose-user-admin/comp
     ClassroomsAdminComponent,
     ComposeClassroomAdminComponent,
     UserAdminComponent,
-    ComposeUserComponent
+    ComposeUserComponent,
+    ComposeAdminComponent,
+    ComposeProfessorAdminComponent
     
   ],
   imports: [

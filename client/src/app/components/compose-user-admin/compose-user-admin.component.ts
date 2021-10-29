@@ -64,7 +64,10 @@ export class ComposeUserComponent implements OnInit {
 
   private createUser(){
     this.loading = true;
-    this.apiService.post('/auth/register', JSON.stringify(this.userForm.getRawValue())).subscribe(
+    let userJson = this.userForm.getRawValue();
+    userJson.type='Director';
+    
+    this.apiService.post('/auth/register', JSON.stringify(userJson)).subscribe(
       (response) => {
         this.loading = false;
         if (response.status?.statusCode === 201){

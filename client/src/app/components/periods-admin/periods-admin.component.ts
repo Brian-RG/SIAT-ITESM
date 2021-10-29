@@ -16,7 +16,6 @@ export class PeriodsAdminComponent implements OnInit {
     {display: 'Nombre', prop: 'name'},
     {display: 'Fecha de inicio', prop: 'startData'},
     {display: 'Fecha de fin', prop: 'endData'},
-    {display: 'Vacaciones', prop: 'vacations'},
     {display: 'Intensivo', prop: 'intensive'}
   ];
   public loading: boolean;

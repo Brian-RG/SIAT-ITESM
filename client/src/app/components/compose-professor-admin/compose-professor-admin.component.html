@@ -1,0 +1,62 @@
+<form nz-form [formGroup]="professorForm" class="professor-form">
+    <nz-form-item>
+      <nz-form-label nzRight [nzSpan]="6" nzRequired nzFor="name">Nombre</nz-form-label>
+      <nz-form-control [nzSpan]="16" nzErrorTip="El nombre del maestro es requerido...">
+        <input nz-input formControlName="name" id="name" type="text"/>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzRequired nzFor="nomina">Nomina</nz-form-label>
+      <nz-form-control [nzSpan]="16" nzErrorTip="El número de nomina es requerido...">
+        <input nz-input formControlName="nomina" id="nomina" type="text"/>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzRequired [nzSpan]="6" nzFor="email">Correo Electrónico</nz-form-label>
+        <nz-form-control [nzSpan]="16" [nzErrorTip]="emailErrorTip">
+          <input nz-input formControlName="email" id="email" type="email"/>
+          <ng-template #emailErrorTip let-control>
+            <ng-container *ngIf="control.hasError('email')">
+              Ingresa un correo electrónico valido
+            </ng-container>
+            <ng-container *ngIf="control.hasError('required')">
+              El correo electrónico es requerido...
+            </ng-container>
+          </ng-template>
+    
+        </nz-form-control>
+      </nz-form-item>
+    <nz-form-item>
+        <nz-form-label nzRight [nzSpan]="6" nzRequired nzFor="password">Contraseña</nz-form-label>
+        <nz-form-control [nzSpan]="16" nzErrorTip="La contraseña del maestro es requerida...">
+          <input nz-input formControlName="password" id="password" type="password"/>
+        </nz-form-control>
+      </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzFor="coordination">Coordinación</nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <input nz-input formControlName="coordination" id="coordination" type="text"/>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label [nzSpan]="6" nzFor="area">Área</nz-form-label>
+      <nz-form-control [nzSpan]="16">
+        <nz-select nzMode="tags" formControlName="area">
+          <ng-container *ngIf="isArray(professorForm.controls.area)">
+            <nz-option *ngFor="let ar of professorForm.controls.area" [nzLabel]="ar" [nzValue]="ar"></nz-option>
+          </ng-container>
+        </nz-select>
+      </nz-form-control>
+    </nz-form-item>
+    <nz-form-item>
+      <nz-form-label nzRequired [nzSpan]="6" nzFor="loadLimit">Límite de Carga</nz-form-label>
+      <nz-form-control [nzSpan]="16" nzErrorTip="El limite de carga es requerido...">
+        <input nz-input formControlName="loadLimit" id="loadLimit" type="number"/>
+      </nz-form-control>
+    </nz-form-item>
+  </form>
+  <div *nzModalFooter>
+    <button nz-button nzType="default" (click)="cancel()">Cancelar</button>
+    <button nz-button [nzLoading]="loading" nzType="primary" (click)="saveProfessor()" [disabled]="!professorForm.valid">Guardar Maestro</button>
+  </div>
+  

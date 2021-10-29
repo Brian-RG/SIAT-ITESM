@@ -1,32 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder } from '@angular/forms';
 import { NzMessageService, NzModalService } from 'ng-zorro-antd';
-import { Administrators } from 'src/app/models/administrator.model';
-//import { Professor } from 'src/app/models/professor.model';
-import { Users } from 'src/app/models/users.model';
+import { Professor } from 'src/app/models/professor.model';
 import { ApiService } from 'src/app/services/api/api.service';
-import { ComposeAdminComponent } from '../compose-admin/compose-admin.component';
-import { ComposeProfessorAdminComponent } from '../compose-professor-admin/compose-professor-admin.component';
 import { ComposeProfessorComponent } from '../compose-professor/compose-professor.component';
 
-import { ComposeUserComponent } from '../compose-user-admin/compose-user-admin.component';
 
 @Component({
-  selector: 'siat-user-admin',
-  templateUrl: './user-admin.component.html',
-  styleUrls: ['./user-admin.component.scss']
+  selector: 'siat-professor-admin',
+  templateUrl: './professor-admin.component.html',
+  styleUrls: ['./professor-admin.component.scss']
 })
-export class UserAdminComponent implements OnInit {
+export class ProfessorAdminComponent implements OnInit {
 
   public columnsToDisplay = [
-    {display: 'Correo', prop: 'email'},
     {display: 'Nomina', prop: 'nomina'},
     {display: 'Nombre', prop: 'name'},
-    {display: 'Password', prop: 'password'},
+    {display: 'password', prop: 'password'},
+    {display: 'Área', prop: 'area'},
+    {display: 'Coordinación', prop: 'coordination'},
+    {display: 'Email', prop: 'email'},
+    {display: 'Límite de carga', prop: 'loadLimit'},
   ];
-  public users: Array<Users>;
-  // public professors: Array<Professor>;
-  // public administrators: Array<Administrators>;
+  public professors: Array<Professor>;
   public loading: boolean;
 
   constructor(
@@ -35,19 +31,19 @@ export class UserAdminComponent implements OnInit {
     private nzModalService: NzModalService
   ) {
     this.loading = true;
-    this.apiService.get('/usuarios').subscribe(
+    this.apiService.get('/professors').subscribe(
       (response) => {
         this.loading = false;
         if (response.status?.statusCode === 200){
-          this.users = response.result;
+          this.professors = response.result;
         } else {
-          this.nzMessageService.error('Error al cargar usuarios');
+          this.nzMessageService.error('Error al cargar maestros');
         }
       },
       (error) => {
         this.loading = false;
-        this.nzMessageService.error('Error al cargar usuarios');
-        console.log('Error al cargar usuarios', error);
+        this.nzMessageService.error('Error al cargar maestros');
+        console.log('Error al cargar maestros', error);
       }
     );
   }
@@ -55,61 +51,27 @@ export class UserAdminComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  public createUser(type: string){
-    let component : any;
-    let title : string;
-    switch(type){
-      case 'admin':{
-        component = ComposeAdminComponent;
-        title = 'Agregar Administrador';
-        break;
-      }
-      case 'professor':{
-        component = ComposeProfessorAdminComponent;
-        title = 'Agregar Profesor';
-        break;
-      }
-      case 'director':{
-        component = ComposeUserComponent;
-        title = 'Agregar Director';
-        break;
-      }
-    }
+  public createProfessor(){
     const modal = this.nzModalService.create({
-      nzTitle: title,
-      nzContent: component,
+      nzTitle: 'Agregar Profesor',
+      nzContent: ComposeProfessorComponent,
       nzStyle: {width: '80vw'},
     });
 
     modal.afterClose.subscribe(
       (result) => {
-        if (result){
-          let data = [];
-          data.push(result.users);
-          this.users = [
-            ... data,
-            ...this.users
-          ]
-        }
-      }
-    );
-
-    /*
-    modal.afterClose.subscribe(
-      (result) => {
         if (result?.professors){
-          this.users = [
+          this.professors = [
             ...result.professors,
-            ...this.users
+            ...this.professors
           ];
         }
       }
     );
-    */
   }
 
   public afterCsvSuccess(data){
-    this.users = [...data, ...this.users];
+    this.professors = [...data, ...this.professors];
   }
 
   public onDelete(id){
@@ -118,8 +80,8 @@ export class UserAdminComponent implements OnInit {
 
   private showDeleteConfirmation(id){
     this.nzModalService.confirm({
-      nzTitle: 'Borrar Usuario',
-      nzContent: '<span style="color: red;">Seguro que deseas borrar este usuario?</span>',
+      nzTitle: 'Borrar Maestro',
+      nzContent: '<span style="color: red;">Seguro que deseas borrar este maestro?</span>',
       nzOkText: 'Borrar',
       nzOkType: 'danger',
       nzOnOk: () => {
@@ -135,7 +97,7 @@ export class UserAdminComponent implements OnInit {
       (response) => {
         this.loading = false;
         if (response.status?.statusCode === 200){
-          this.users = this.users.filter(professor => professor.id !== id);
+          this.professors = this.professors.filter(professor => professor.id !== id);
           this.nzMessageService.success('Maestro borrado con éxito');
         } else {
           this.nzMessageService.error('Ocurrió un error al borrar el maestro');
@@ -160,8 +122,8 @@ export class UserAdminComponent implements OnInit {
     modal.afterClose.subscribe(
       (result) => {
         if (result?.professor){
-          const index = this.users.findIndex(professor => professor.id === result.professor.id);
-          Object.assign(this.users[index], result.professor);
+          const index = this.professors.findIndex(professor => professor.id === result.professor.id);
+          Object.assign(this.professors[index], result.professor);
         }
       }
     );
