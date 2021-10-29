@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { ProfessorDto } from '../dto/professor.dto';
+import { CreateProfessorDto } from '../dto/create-professor.dto';
 
 export class CreateProfessorsReq {
   @ApiProperty()
-  professors: ProfessorDto[];
+  professors: CreateProfessorDto[];
 }
