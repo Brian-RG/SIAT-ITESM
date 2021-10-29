@@ -68,13 +68,8 @@ export class UsersService {
         break;
     }
 
-    console.log(thing);
-
     user.type = thing;
 
-    console.log(user.type);
-
-    console.log(user);
 
     await this.usersRepository.save(user);
     return this._toUserDTO(user);
