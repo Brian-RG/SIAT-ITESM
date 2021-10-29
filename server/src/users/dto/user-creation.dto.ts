@@ -25,4 +25,5 @@ export class CreateUserDTO {
   @ApiProperty()
   @IsNotEmpty()
   type: string;
+  
 }
