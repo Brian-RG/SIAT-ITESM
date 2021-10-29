@@ -14,6 +14,8 @@ import { PeriodsEntity } from '../../periods/entity/periods.entity';
 import { Course21Entity } from '../../courses21/entities/course21.entity';
 import { AvenueEntity } from '../../avenue/entity/avenue.entity';
 
+import {UserType} from '../usertype/user-type';
+
 @Entity('users')
 export class UsersEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -41,6 +43,13 @@ export class UsersEntity {
     nullable: false,
   })
   password: string;
+
+  @Column({
+    type: 'enum',
+    enum: UserType,
+    nullable: true,
+  })
+  type: UserType;
 
   @BeforeInsert() async hashPassword() {
     this.password = await securityUtils.hashPass(this.password);

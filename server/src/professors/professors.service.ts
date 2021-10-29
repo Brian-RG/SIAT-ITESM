@@ -11,13 +11,14 @@ import { UpdateProfessorDto } from './dto/update-professor.dto';
 import { AvailableReq } from './interfaces/availableReq.interface';
 import { EventsService } from '../events/events.service';
 
+import { UserType } from 'src/users/usertype/user-type';
+
 @Injectable()
 export class ProfessorsService {
   constructor(
     @InjectRepository(ProfessorsEntity)
     private professorsRepository: Repository<ProfessorsEntity>,
     @InjectRepository(UsersEntity)
-    private userRepository: Repository<UsersEntity>,
     private readonly eventsService: EventsService,
   ) {}
 
@@ -31,6 +32,18 @@ export class ProfessorsService {
     createReq: CreateProfessorsReq,
     uuid: string,
   ): Promise<ResponseStatus> {
+
+    for(let i=0; i<createReq.professors.length; i++){
+      
+      let user = new UsersEntity();
+      user.name = createReq.professors[i].name;
+      user.nomina = createReq.professors[i].nomina;
+      user.email = createReq.professors[i].email;
+      user.password = createReq.professors[i].password;
+      user.type = UserType.Professor;
+
+      createReq.professors[i].user = user;
+    }
 
     return db.create<ProfessorsEntity, ProfessorDto>(
       this.professorsRepository,

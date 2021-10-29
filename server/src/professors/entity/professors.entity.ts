@@ -4,9 +4,12 @@ import {
   PrimaryGeneratedColumn,
   ManyToOne,
   OneToMany,
+  OneToOne,
+  JoinColumn
 } from 'typeorm';
 import { ProfessorsToGroups } from '../../professorsToGroups/entity/professorsToGroups.entity';
 import { ProfessorsToBloqueModules } from '../../professorsToBloqueModules/entity/professorsToBloqueModules.entity';
+import {UsersEntity} from '../../users/entity/users.entity';
 
 @Entity('professors')
 export class ProfessorsEntity {
@@ -44,6 +47,10 @@ export class ProfessorsEntity {
     nullable: false,
   })
   loadLimit: number;
+
+  @OneToOne( () => UsersEntity, {cascade : true})
+  @JoinColumn()
+  user: UsersEntity;
 
   @OneToMany(
     () => ProfessorsToGroups,
