@@ -87,8 +87,8 @@ import { ComposeProfessorAdminComponent } from 'src/app/components/compose-profe
     UserAdminComponent,
     ComposeUserComponent,
     ComposeAdminComponent,
-    ComposeProfessorAdminComponent
-    
+    ComposeProfessorAdminComponent,
+  
   ],
   imports: [
     CommonModule,

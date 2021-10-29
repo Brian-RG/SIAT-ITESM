@@ -23,7 +23,6 @@ export class CreateUserDTO {
   password: string;
 
   @ApiProperty()
-  @IsNotEmpty()
   type: string;
   
 }

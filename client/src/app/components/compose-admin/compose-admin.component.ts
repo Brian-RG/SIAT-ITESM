@@ -1,6 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NzMessageService, NzModalRef } from 'ng-zorro-antd';
+import { Administrators } from 'src/app/models/administrator.model';
 import { ApiService } from 'src/app/services/api/api.service';
 
 @Component({
@@ -10,101 +11,102 @@ import { ApiService } from 'src/app/services/api/api.service';
 })
 export class ComposeAdminComponent implements OnInit {
 
-  administratorForm!: FormGroup;
-  loading: boolean;
-  @Input() administrator;
-  @Input() isEditing;
+  @Input() administrator: Administrators;
+  @Input() isEditing: boolean;
+  public loading: boolean;
+  public administratorForm: FormGroup;
 
   constructor(
-    private fb: FormBuilder,
-    private api: ApiService,
-    private nzMessageService: NzMessageService,
-    private nzModalRef: NzModalRef
+    private apiService: ApiService,
+    private formBuilder: FormBuilder,
+    private nzModalRef: NzModalRef,
+    private nzMessageService: NzMessageService
   ) { }
 
   ngOnInit(): void {
-    if (this.administrator){
-      this.initializeEditForm();
-    }else{
-      this.initializeCreateForm();
+    if (this.administrator) {
+      this.createFormWithProfessor();
+    } else {
+      this.createForm();
     }
   }
 
-  handleCancel(){
+  private createForm(){
+    this.administratorForm = this.formBuilder.group({
+      name: ['', [Validators.required]],
+      nomina: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', [Validators.required]]
+    });
+  }
+
+  private createFormWithProfessor(){
+    this.administratorForm = this.formBuilder.group({
+      name: [this.administrator.name, [Validators.required]],
+      nomina: [this.administrator.nomina, [Validators.required]],
+      email: [this.administrator.email, [Validators.required, Validators.email]],
+      password: [this.administrator.password, [Validators.required]]
+    });
+    this.administratorForm.controls.nomina.disable();
+  }
+
+  public cancel(){
     this.nzModalRef.destroy();
   }
 
-  handleOk(){
+  public saveUser(){
     if (this.isEditing){
-      this.editAdministrator();
-    }else{
-      this.addAdministrator();
+      this.editUser();
+    } else {
+      this.createUser();
     }
   }
 
-  addAdministrator(){
+  private createUser(){
     this.loading = true;
-    
     let userJson = this.administratorForm.getRawValue();
-    userJson.type='Administrador';
+    userJson.type='ADMIN';
 
-    console.log(this.administratorForm.value);
-
-    /*
-    this.api.post(`/administrator`, {classrooms: [this.administratorForm.value]}).subscribe((res) => {
-      this.loading = false;
-      if (res.status?.statusCode === 201){
-        this.nzMessageService.success('Salón creado con éxito');
-        this.nzModalRef.destroy({classroom: res.result});
-      }else {
-        this.nzMessageService.error('Ocurrió un error al agregar el administrador');
-      }
-    }, (error) => {
-      this.loading = false;
-      this.nzMessageService.error('Ocurrió un error al agregar el administrador');
-    }
-    );
-
-     */
+    console.log(userJson);
     
-  }
-
- 
-
-  editAdministrator(){
-    this.loading = true;
-    this.api.put(`/classrooms/${this.administrator.id}`, this.administratorForm.value).subscribe((res) => {
-      this.loading = false;
-      if (res.status?.statusCode === 200){
-        this.nzMessageService.success('Salon editado con éxito');
-        this.nzModalRef.destroy({classroom: res.result});
-      }else {
-        this.nzMessageService.error('Ocurrió un error al editar el administrador');
+    this.apiService.post('/auth/register', JSON.stringify(userJson)).subscribe(
+      (response) => {
+        this.loading = false;
+        if (response.status?.statusCode === 201){
+          this.nzMessageService.success('Usuario creado con éxito');
+          this.nzModalRef.destroy({users: response.result});
+        } else {
+          console.log(response);
+          this.nzMessageService.error('Ocurrió un error al crear el usuario');
+        }
+      },
+      (error) => {
+        this.loading = false;
+        this.nzMessageService.error('Ocurrió un error al crear el usuario');
       }
-    }, (error) => {
-      console.log(error);
-      this.loading = false;
-      this.nzMessageService.error('Ocurrió un error al editar el administrador');
-    }
     );
   }
 
-  initializeCreateForm(){
-    this.administratorForm = this.fb.group({
-      name: [null, [Validators.required]],
-      nomina: [this.administrator.nomina, [Validators.required]],
-      email: [null, [Validators.required]],
-      passowrd: [null, [Validators.required]]
-    });
+  private editUser(){
+    this.loading = true;
+    this.apiService.put(`/usuarios/${this.administrator.id}`, this.administratorForm.value).subscribe(
+      (response) => {
+        this.loading = false;
+        if (response.status?.statusCode === 200){
+          this.nzMessageService.success('Usuario editado con éxito');
+          this.nzModalRef.destroy({professor: response.result});
+        } else {
+          this.nzMessageService.error('Ocurrió un error al editar el usuario');
+        }
+      },
+      (error) => {
+        this.loading = false;
+        this.nzMessageService.error('Ocurrió un error al editar el usuario');
+      }
+    );
   }
 
-  initializeEditForm(){
-    this.administratorForm = this.fb.group({
-      name: [this.administrator.nombre, [Validators.required]],
-      nomina: [this.administrator.nomina, [Validators.required]],
-      email: [this.administrator.correo, [Validators.required]],
-      passowrd: [this.administrator.password, [Validators.required]],
-    });
+  public isArray(object: any): boolean{
+    return Array.isArray(object);
   }
-
 }

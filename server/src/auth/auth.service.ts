@@ -32,6 +32,7 @@ export class AuthService {
     };
 
     try {
+      console.log(userDto);
       const newUser = await this.usersService.create(userDto);
       this.logger.log('New user created with uuid: ' + newUser.id);
       response.result = newUser;

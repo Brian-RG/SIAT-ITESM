@@ -70,14 +70,12 @@ export class ComposeProfessorAdminComponent implements OnInit {
 
   private createProfessor(){
     this.loading = true;
-    
-    console.log(this.professorForm.value);
-    /*this.apiService.post('/professors', {professors: [this.professorForm.value]}).subscribe(
+    this.apiService.post('/professors', {professors: [this.professorForm.value]}).subscribe(
       (response) => {
         this.loading = false;
         if (response.status?.statusCode === 201){
           this.nzMessageService.success('Maestro creado con éxito');
-          this.nzModalRef.destroy({professors: response.result});
+          this.nzModalRef.destroy({users : response.result});
         } else {
           this.nzMessageService.error('Ocurrió un error al crear el maestro');
         }
@@ -87,7 +85,7 @@ export class ComposeProfessorAdminComponent implements OnInit {
         this.nzMessageService.error('Ocurrió un error al crear el maestro');
       }
     );
-    */
+    
   }
 
   private editProfessor(){

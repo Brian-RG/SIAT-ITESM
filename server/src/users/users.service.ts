@@ -7,6 +7,8 @@ import { UserDTO } from './dto/user.dto';
 import { CreateUserDTO } from './dto/user-creation.dto';
 import { UserInfoDTO } from './dto/user-info.dto';
 
+import { UserType } from './usertype/user-type';
+
 @Injectable()
 export class UsersService {
   constructor(
@@ -34,7 +36,7 @@ export class UsersService {
    * @returns The information created of the user.
    */
   async create(userDto: CreateUserDTO): Promise<UserDTO> {
-    const { nomina, email, name, password } = userDto;
+    const { nomina, email, name, password, type } = userDto;
     // If either the email or nomina of the user is already registered,
     // we reject the request.
     const userInDb = await this.findOne({
@@ -44,12 +46,35 @@ export class UsersService {
     if (userInDb) {
       throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
     }
+
     const user: UsersEntity = this.usersRepository.create({
       email,
       password,
       name,
       nomina,
     });
+
+    let thing : UserType;
+
+    switch(type){
+      case UserType.Administrator:
+        thing = UserType.Administrator;
+        break;
+      case UserType.Director:
+        thing = UserType.Director;
+        break;
+      case UserType.Professor:
+        thing = UserType.Professor;
+        break;
+    }
+
+    console.log(thing);
+
+    user.type = thing;
+
+    console.log(user.type);
+
+    console.log(user);
 
     await this.usersRepository.save(user);
     return this._toUserDTO(user);
