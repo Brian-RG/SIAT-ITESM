@@ -28,6 +28,12 @@
             </nz-form-control>
           </nz-form-item>
           <button nz-button nzBlock [nzSize]="size" class="login-form-button login-form-margin" [nzLoading]="loading">Ingresar</button>
+          <ng-container *ngIf="flag">
+            <a href ="/login/admin" >Soy Administrador             &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</a>
+          </ng-container>        
+          <ng-container *ngIf="flag">
+            <a href ="/login/profesor" >Soy Profesor</a>
+          </ng-container>
         </form>
       </div>
     </div>

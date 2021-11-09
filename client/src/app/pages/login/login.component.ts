@@ -17,8 +17,9 @@ export class LoginComponent implements OnInit{
   public size: NzButtonSize = 'large';
   public loading: boolean;
 
-  private type: string = 'dir';
+  public type: string = 'dir';
   private url: string = 'dir';
+  flag: boolean = true;
   constructor(
     private authService: AuthService,
     private formBuilder: FormBuilder,
@@ -49,7 +50,14 @@ export class LoginComponent implements OnInit{
 
     this.type = this.route.snapshot.params.type;
     if (!this.type){
+      console.log("I'm right here");
       this.type="dir";
+      this.flag=true;
+    }
+    else if (this.type==='admin'){
+      this.flag=false;
+    }else if (this.type==='profesor'){
+      this.flag=false;
     }
   }
 
