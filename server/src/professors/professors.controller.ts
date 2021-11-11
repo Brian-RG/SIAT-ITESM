@@ -34,6 +34,13 @@ export class ProfessorsController {
     return this.professorsService.findAll(req.user.id);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @Get('horario/:id')
+  getHorario(@Param('id') id:string){
+    console.log(id);
+    this.professorsService.getHorarios()
+  }
+
   /** A POST is not ideal, an alternative could be query parameters. */
   @UseGuards(JwtAuthGuard)
   @Post('remaining')

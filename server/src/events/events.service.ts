@@ -349,8 +349,7 @@ export class EventsService {
       .leftJoin('professor.groups20', 'groups20')
       .leftJoin('professor.groups21', 'groups21')
       .where(
-        'user.id = :userId::uuid AND groups20 IS NULL AND groups21 IS NULL',
-        { userId: uuid },
+        'groups20 IS NULL AND groups21 IS NULL'
       )
       .getMany();
 
@@ -369,8 +368,8 @@ export class EventsService {
       .leftJoin('group21.period', 'period21')
       .leftJoinAndSelect('groupModule.events', 'events21')
       .where(
-        '(user.id = :userId::uuid) AND (period20.id = :periodId::uuid OR period21.id = :periodId::uuid)',
-        { periodId: data.periodId, userId: uuid },
+        '(period20.id = :periodId::uuid OR period21.id = :periodId::uuid)',
+        { periodId: data.periodId },
       )
       .getMany();
 

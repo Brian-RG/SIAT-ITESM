@@ -40,7 +40,7 @@ export class BloqueGroupsService {
     }
     // Get the period and courses that will have the entity added.
     const period = await this.periodRepository.findOne({
-      where: { id: createReq.periodId, user: uuid },
+      where: { id: createReq.periodId },
       relations: ['bloqueGroups'],
     });
     if (period) {
@@ -57,7 +57,7 @@ export class BloqueGroupsService {
         }
         // Grab the corresponding course to verify that it exists.
         const course = await this.course21Repository.findOne({
-          where: { key: group.courseKey, user: uuid },
+          where: { key: group.courseKey },
           relations: ['modules'],
         });
         if (course) {
