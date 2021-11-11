@@ -19,6 +19,7 @@ export class ProfessorsService {
     @InjectRepository(ProfessorsEntity)
     private professorsRepository: Repository<ProfessorsEntity>,
     @InjectRepository(UsersEntity)
+    private userRep : Repository<UsersEntity>,
     private readonly eventsService: EventsService,
   ) {}
 
@@ -96,6 +97,44 @@ export class ProfessorsService {
       'Searched successfully.',
       professors,
     );
+  }
+
+
+  async getHorarios(){
+    const tec20Info = await this.professorsRepository
+      .createQueryBuilder('professor')
+      .innerJoin('professor.groups20', 'groups20')
+      .innerJoin('groups20.group', 'group20')
+      .innerJoin('group20.course', 'course20')
+      .innerJoin('group20.period', 'period20')
+      .innerJoin('group20.events', 'event20')
+      .addSelect('group20', 'grupo');
+
+
+    //const tec20Data = await tec20Info.getRawMany();
+
+    const tec20Prueba = await tec20Info.getMany();
+
+    /*
+    for( let d of tec20Data){
+      let group_id = d.group20_id;
+      let other_thing = await this.eventsService.findEventTec20(group_id);
+
+      //console.log(other_thing);
+    }
+
+    */
+    
+
+      
+    //console.log(tec20Info.getQuery());
+
+    //console.log(tec20Data);
+
+    console.log(tec20Prueba);
+    //console.log(tec20Info.getQuery());
+
+    //console.log(tec20Info.getMany());
   }
 
   /**
