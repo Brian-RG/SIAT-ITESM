@@ -100,41 +100,62 @@ export class ProfessorsService {
   }
 
 
-  async getHorarios(){
-    const tec20Info = await this.professorsRepository
+  async getHorarios(id:string, periodId:string){
+    const tec20Info = this.professorsRepository
       .createQueryBuilder('professor')
       .innerJoin('professor.groups20', 'groups20')
       .innerJoin('groups20.group', 'group20')
       .innerJoin('group20.course', 'course20')
       .innerJoin('group20.period', 'period20')
-      .innerJoin('group20.events', 'event20')
-      .addSelect('group20', 'grupo');
+      .innerJoin('group20.events', 'event')
+      .innerJoin('group20.classroom', 'classroom20')
+      .select('event')
+      .addSelect('group20')
+      .addSelect('course20')
+      .addSelect('classroom20')
+      .where('(professor.id = :id) AND (period20.id = :periodId)', {
+        id: id,
+        periodId: periodId,
+      });
+
+    const tec21Info = this.professorsRepository
+    .createQueryBuilder('professor')
+    .innerJoin('professor.groups21', 'groups21')
+    .innerJoin('groups21.group', 'moduleG21')
+    .innerJoin('moduleG21.group', 'group21')
+    .innerJoin('group21.course21', 'course21')
+    .innerJoin('moduleG21.events', 'event')
+    .innerJoin('moduleG21.classroom', 'classroom21')
+    .innerJoin('moduleG21.module', 'mod')
+    .innerJoin('group21.period', 'period21')
+    .select('event')
+    .addSelect('group21')
+    .addSelect('course21')
+    .addSelect('moduleG21')
+    .addSelect('classroom21')
+    .addSelect('mod')
+    .where('(professor.id = :id) AND (period21.id = :periodId)', {
+      id: id,
+      periodId: periodId,
+    });
+
+    //console.log(tec21Info.getQuery());
+
+    const tec20Data = await tec20Info.getRawMany();
+
+    const tec21Data = await tec21Info.getRawMany();
 
 
-    //const tec20Data = await tec20Info.getRawMany();
 
-    const tec20Prueba = await tec20Info.getMany();
-
-    /*
-    for( let d of tec20Data){
-      let group_id = d.group20_id;
-      let other_thing = await this.eventsService.findEventTec20(group_id);
-
-      //console.log(other_thing);
+    const data = {
+        "tec20":tec20Data,
+        "tec21":tec21Data
     }
 
-    */
-    
+    //console.log(tec21Data);
 
-      
-    //console.log(tec20Info.getQuery());
+    return db.createResponseStatus(HttpStatus.OK, "Data obtained successfully", data);
 
-    //console.log(tec20Data);
-
-    console.log(tec20Prueba);
-    //console.log(tec20Info.getQuery());
-
-    //console.log(tec20Info.getMany());
   }
 
   /**

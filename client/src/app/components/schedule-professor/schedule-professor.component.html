@@ -20,76 +20,58 @@
           <ng-container *ngIf="day[hour] as event;">
             <ng-container *ngIf="event.isModule; else course">
               <small style="cursor: pointer;" nz-popover
-                [nzPopoverTitle]="'Modulo ' + event.group.module.name + ' - ' + event.group.group.course21.name"
+                [nzPopoverTitle]="'Modulo ' + event.mod_name + ' - ' + event.course21_name"
                 [nzPopoverContent]="popoverContent"
-                nzPopoverTrigger="hover"><a>Modulo {{event.group.module.name + ' - ' + event.group.group.course21.key + ' - Grupo ' + event.group.group.number}}</a></small>
+                nzPopoverTrigger="hover"><a>Modulo {{event.mod_name + ' - ' + event.course21_key + ' - Grupo ' + event.group21_number}}</a></small>
                 <ng-template #popoverContent>
                   <small>
-                    Grupo {{event.group.group.number}}
+                    Grupo {{event.group21_number}}
                   </small>
                   <br>
                   <small>
-                    Semana Inicial {{event.group.group.course21.initialWeek}}
+                    Semana Inicial {{event.course21_initialWeek}}
                   </small>
                   <br>
                   <small>
-                    Semana Final {{event.group.group.course21.initialWeek + event.group.group.course21.weeks - 1}}
+                    Semana Final {{event.course21_initialWeek + event.course21_weeks - 1}}
                   </small>
                   <br>
                   <small>
-                    Duración {{event.group.group.course21.weeks}}
+                    Duración {{event.course21_weeks}}
                   </small>
                   <br>
                   <small>
-                    {{event.startTimeString}} - {{event.endTimeString}}
+                    {{event.course21_startTimeString}} - {{event.course21_endTimeString}}
                   </small>
                   <br>
-                  <ng-container *ngFor="let cursor of event.professors">
-                    <small>
-                      {{ cursor.professor.nomina }} - {{ cursor.professor.name }}
-                    </small>
-                    <br>
-                  </ng-container>
-                  <br>
-                  <button nz-button nzType="danger" nzGhost nzSize="small" nzBlock (click)="deleteModule(event)">Eliminar
-                    Grupo</button>
                 </ng-template>
               </ng-container>
             <ng-template #course>
               <small style="cursor: pointer;" nz-popover
-                [nzPopoverTitle]="event.group.course.key + ' - ' + event.group.course.name"
+                [nzPopoverTitle]="event.course20_key + ' - ' + event.course20_name"
                 [nzPopoverContent]="popoverContent"
-                nzPopoverTrigger="hover"><a>{{event.group.course.key + ' - Grupo ' + event.group.number}}</a></small>
+                nzPopoverTrigger="hover"><a>{{event.course20_key + ' - Grupo ' + event.group20_number}}</a></small>
               <ng-template #popoverContent>
                 <small>
-                  Grupo {{event.group.number}}
+                  Grupo {{event.group20_number}}
                 </small>
                 <br>
                 <small>
-                  {{event.startTimeString}} - {{event.endTimeString}}
+                  {{event.event20_startTimeString}} - {{event.event20_endTimeString}}
                 </small>
                 <br>
                 <small>
-                  Semana Inicial: {{event.group.course.initialWeek}}
+                  Semana Inicial: {{event.course20_initialWeek}}
                 </small>
                 <br>
                 <small>
-                  Semana Final: {{event.group.course.initialWeek + event.group.course.weeks - 1}}
+                  Semana Final: {{event.course20_initialWeek + event.course20_weeks - 1}}
                 </small>
                 <br>
                 <small>
-                  Duración: {{event.group.course.weeks}} semanas
+                  Duración: {{event.course20_weeks}} semanas
                 </small>
                 <br>
-                <ng-container *ngFor="let cursor of event.professors">
-                  <small>
-                    {{ cursor.professor.nomina }} - {{ cursor.professor.name }}
-                  </small>
-                  <br>
-                </ng-container>
-                <br>
-                <button nz-button nzType="danger" nzGhost nzSize="small" nzBlock (click)="deleteGroup(event)">Eliminar
-                  Grupo</button>
               </ng-template>
             </ng-template>
           </ng-container>

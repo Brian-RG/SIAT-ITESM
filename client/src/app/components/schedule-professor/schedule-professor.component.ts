@@ -8,7 +8,6 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 export class ScheduleProfessorComponent implements OnInit, OnChanges{
   @Input() events: Array<any>;
   @Input() week: number;
-  @Input() periodId: string;
   @Output() deleteGroupEvent = new EventEmitter<any>();
   @Output() deleteModuleEvent = new EventEmitter<any>();
 
@@ -23,15 +22,18 @@ export class ScheduleProfessorComponent implements OnInit, OnChanges{
   ngOnChanges(): void{
     this.createHourKeyIndexes();
     if (this.events) {
+      //console.log(this.events);
       this.getDayEvents();
       this.assignDayEventsToHours();
+
+      //console.log(this.dayEvents);
     }
   }
 
   public getDayEvents() {
     for (let i = 0; i < 6; i++) {
       this.dayEvents[i] = this.events.filter((element) => {
-        return element.weekDay === i;
+        return element.event_weekDay === i;
       });
     }
   }
@@ -54,8 +56,8 @@ export class ScheduleProfessorComponent implements OnInit, OnChanges{
   }
 
   private getHourSpan(event: any){
-    let startTime = event.startTimeString;
-    const endTime = event.endTimeString;
+    let startTime = event.event_startTimeString;
+    const endTime = event.event_endTimeString;
     const hourSpan = [];
 
     while (startTime !== endTime){

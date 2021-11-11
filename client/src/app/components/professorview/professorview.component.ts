@@ -41,6 +41,14 @@ export class ProfessorviewComponent implements OnInit {
 
     this.getPeriods();
 
+    //this.getAssignedGroups();
+
+  }
+
+  public changePeriod(data){
+    if(data!==null){
+      this.getAssignedGroups(data);
+    }
   }
 
   public getPeriods(){
@@ -57,6 +65,52 @@ export class ProfessorviewComponent implements OnInit {
         console.log('Error al cargar salón', error);
       }
     );
+  }
+
+  private getAssignedGroups(periodId){
+    this.apiService.get(`/professors/horario/${this.professorId}/${periodId}`).subscribe(
+      (response) => {
+        if (response.status.statusCode === 200) {
+          this.assignedGroups = response.result.tec20;
+          this.assignedModules = response.result.tec21;
+          console.log(response);
+        } else {
+          this.nzMessageService.error('Error al cargar programación del salón');
+        }
+      },
+      (error) => {
+        this.nzMessageService.error('Error al cargar programación del salón');
+        console.log('Error al cargar programación del salón', error);
+      }
+    );
+  }
+
+  public getFlattenedAssignedGroups(){
+    let allGroups = [];
+
+    const mappedModules = this.assignedModules?.map((mod) => {
+      mod.isModule = true;
+      return mod;
+    });
+
+    allGroups = [...this.assignedGroups, ...mappedModules];
+
+    allGroups = allGroups.filter((el) => {
+      let initialWeek = null;
+      let finalWeek = null;
+
+      if (el.isModule){
+        initialWeek = el.course21_initialWeek;
+        finalWeek = initialWeek + el.course21_weeks - 1;
+      } else {
+        initialWeek = el.course20_initialWeek;
+        finalWeek = initialWeek + el.course20_weeks - 1;
+      }
+
+      return this.week >= initialWeek && this.week <= finalWeek;
+    });
+
+    return allGroups;
   }
 
 

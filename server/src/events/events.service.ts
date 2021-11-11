@@ -343,9 +343,10 @@ export class EventsService {
       initialWeek = group.course21.initialWeek;
       endWeek = group.course21.weeks + initialWeek;
     }
+
+    //TODO - CHANGE THIS QUERY
     const emptyProfessors = await this.professorsRepository
       .createQueryBuilder('professor')
-      .leftJoin('professor.user', 'user')
       .leftJoin('professor.groups20', 'groups20')
       .leftJoin('professor.groups21', 'groups21')
       .where(
@@ -355,7 +356,6 @@ export class EventsService {
 
     const professorsWithGroups = await this.professorsRepository
       .createQueryBuilder('professor')
-      .leftJoin('professor.user', 'user')
       .leftJoinAndSelect('professor.groups20', 'groups20')
       .leftJoinAndSelect('groups20.group', 'group20')
       .leftJoinAndSelect('group20.course', 'course20')
@@ -372,6 +372,13 @@ export class EventsService {
         { periodId: data.periodId },
       )
       .getMany();
+
+    console.log("profesor empty");
+
+    console.log(emptyProfessors);
+    console.log("other");
+    console.log(professorsWithGroups);
+    
 
     const availableProfessors: ProfessorsEntity[] = [];
     // Awful 3 nested for loops, I think it's better to add to the query above,

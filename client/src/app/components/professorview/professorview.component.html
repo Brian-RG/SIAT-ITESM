@@ -8,7 +8,7 @@
         <h3>
           Periodo
         </h3>
-        <nz-select [(ngModel)]="period" nzPlaceHolder="Select Period" style="width: 100%;">
+        <nz-select [(ngModel)]="period" (ngModelChange)="changePeriod($event)" nzPlaceHolder="Select Period" style="width: 100%;">
           <nz-option *ngFor="let p of periods" [nzValue]="p.id" [nzLabel]="p.name"></nz-option>
         </nz-select>
       </div>
@@ -23,6 +23,6 @@
     </div>
   </div>
   <div nz-col [nzSpan]="18">
-    <siat-schedule-professor [periodId]="period.id"  [week]="week"></siat-schedule-professor>
+    <siat-schedule-professor [events]="getFlattenedAssignedGroups()"  [week]="week"></siat-schedule-professor>
   </div>
 </div>

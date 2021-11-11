@@ -35,10 +35,9 @@ export class ProfessorsController {
   }
 
   @UseGuards(JwtAuthGuard)
-  @Get('horario/:id')
-  getHorario(@Param('id') id:string){
-    console.log(id);
-    this.professorsService.getHorarios()
+  @Get('horario/:id/:periodId')
+  getHorario(@Param('id') id:string, @Param('periodId') period:string){
+    return this.professorsService.getHorarios(id,period);
   }
 
   /** A POST is not ideal, an alternative could be query parameters. */
