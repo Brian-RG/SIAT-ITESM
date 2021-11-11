@@ -1,9 +1,17 @@
-<nz-page-header (nzBack)="onBack()" nzBackIcon [nzTitle]="'Salón ' + classroom?.classroom"
+<nz-page-header (nzBack)="onBack()" nzBackIcon [nzTitle]="'Profe '"
   style="padding-left: 0; padding-top: 0;">
 </nz-page-header>
 <div nz-row [nzGutter]="16">
   <div nz-col [nzSpan]="6">
     <div nz-row [nzGutter]="[16, 16]">
+      <div nz-col [nzSpan]="24">
+        <h3>
+          Periodo
+        </h3>
+        <nz-select [(ngModel)]="period" nzPlaceHolder="Select Period" style="width: 100%;">
+          <nz-option *ngFor="let p of periods" [nzValue]="p.id" [nzLabel]="p.name"></nz-option>
+        </nz-select>
+      </div>
       <div nz-col [nzSpan]="24">
         <h3>
           Semana
@@ -12,35 +20,9 @@
           <nz-option *ngFor="let w of weeks" [nzValue]="w" [nzLabel]="w"></nz-option>
         </nz-select>
       </div>
-      <div nz-col [nzSpan]="24" #groups>
-        <h3>Grupos Tec 20</h3>
-        <nz-list [nzBordered]="true" class="group-list" nzSize="small">
-          <nz-list-item *ngFor="let group of remainingGroups">
-            {{ group.course.key }} - Grupo {{ group.number }}
-            <ul nz-list-item-actions>
-              <nz-list-item-action><a (click)="onGroupAssignment(group)">Asignar</a></nz-list-item-action>
-            </ul>
-          </nz-list-item>
-        </nz-list>
-      </div>
-      <div nz-col [nzSpan]="24" #groups>
-        <h3>Grupos Tec 21</h3>
-        <nz-list [nzBordered]="true" class="group-list" nzSize="small">
-          <nz-list-item *ngFor="let module of remainingModules">
-            <small>
-              Módulo {{module.module.name}} <br>
-              Bloque {{ module.group.course21.key }} - Grupo {{ module.group.number }}
-            </small>
-            <ul nz-list-item-actions>
-              <nz-list-item-action><a (click)="onGroupAssignment(module, true)">Asignar</a></nz-list-item-action>
-            </ul>
-          </nz-list-item>
-        </nz-list>
-      </div>
     </div>
   </div>
   <div nz-col [nzSpan]="18">
-    <siat-schedule-table [events]="getFlattenedAssignedGroups()" (deleteGroupEvent)="addRemainingGroup($event)"
-      (deleteModuleEvent)="addRemainingModule($event)" [week]="week"></siat-schedule-table>
+    <siat-schedule-professor [periodId]="period.id"  [week]="week"></siat-schedule-professor>
   </div>
 </div>

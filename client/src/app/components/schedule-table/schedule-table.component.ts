@@ -22,6 +22,7 @@ export class ScheduleTableComponent implements OnInit, OnChanges{
   ngOnChanges(): void{
     this.createHourKeyIndexes();
     if (this.events) {
+      console.log(this.events);
       this.getDayEvents();
       this.assignDayEventsToHours();
     }

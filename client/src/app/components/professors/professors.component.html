@@ -4,4 +4,4 @@
   <button nz-button nzType="primary" style="margin-left: 16px;" (click)="createProfessor()">Agregar Profesor</button>
 </div>
 <siat-table [loading]="loading" [tableData]="professors" [columns]="columnsToDisplay" (delete)="onDelete($event)"
-  (edit)="onEdit($event)"></siat-table>
+  (edit)="onEdit($event)" [hasOpenButton]="true" (openElement)="openPeriod($event)"></siat-table>

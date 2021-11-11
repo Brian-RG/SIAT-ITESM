@@ -8,6 +8,7 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 export class ScheduleProfessorComponent implements OnInit, OnChanges{
   @Input() events: Array<any>;
   @Input() week: number;
+  @Input() periodId: string;
   @Output() deleteGroupEvent = new EventEmitter<any>();
   @Output() deleteModuleEvent = new EventEmitter<any>();
 

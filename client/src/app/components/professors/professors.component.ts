@@ -4,6 +4,7 @@ import { NzMessageService, NzModalService } from 'ng-zorro-antd';
 import { Professor } from 'src/app/models/professor.model';
 import { ApiService } from 'src/app/services/api/api.service';
 import { ComposeProfessorComponent } from '../compose-professor/compose-professor.component';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -27,7 +28,9 @@ export class ProfessorsComponent implements OnInit {
   constructor(
     private apiService: ApiService,
     private nzMessageService: NzMessageService,
-    private nzModalService: NzModalService
+    private nzModalService: NzModalService,
+    private router: Router
+
   ) {
     this.loading = true;
     this.apiService.get('/professors').subscribe(
@@ -126,5 +129,9 @@ export class ProfessorsComponent implements OnInit {
         }
       }
     );
+  }
+
+  public openPeriod(data){
+    this.router.navigate(['/dashboard/maestros', data.id]);
   }
 }

@@ -10,6 +10,7 @@ import { LayoutComponent } from 'src/app/components/layout/layout.component';
 import { PeriodComponent } from 'src/app/components/period/period.component';
 import { GroupClassroomComponent } from 'src/app/components/group-classroom/group-classroom.component';
 import { AvenuesComponent } from 'src/app/components/avenues/avenues.component';
+import { ProfessorviewComponent } from 'src/app/components/professorview/professorview.component';
 
 const routes: Routes = [
   {
@@ -51,6 +52,10 @@ const routes: Routes = [
       {
         path: 'periodo/:periodId/salon/:classroomId',
         component: GroupClassroomComponent
+      },
+      {
+        path: 'maestros/:professorId',
+        component: ProfessorviewComponent
       }
     ]
   }
