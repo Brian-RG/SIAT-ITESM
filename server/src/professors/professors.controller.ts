@@ -16,11 +16,13 @@ import { JwtRequest } from '../utils/interfaces/request-token';
 import { UpdateProfessorDto } from './dto/update-professor.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AvailableReq } from './interfaces/availableReq.interface';
+import {MailService } from '../mail/mail.service'
+import { MailModule } from '../mail/mail.module';
 
 @ApiBearerAuth('access-token')
 @Controller('professors')
 export class ProfessorsController {
-  constructor(private readonly professorsService: ProfessorsService) {}
+  constructor(private readonly professorsService: ProfessorsService, private readonly mailService: MailService) {}
 
   @UseGuards(JwtAuthGuard)
   @Post()
@@ -31,7 +33,9 @@ export class ProfessorsController {
   @UseGuards(JwtAuthGuard)
   @Get()
   findAll(@Request() req: JwtRequest) {
-    return this.professorsService.findAll(req.user.id);
+    //return this.professorsService.findAll(req.user.id);
+    this.mailService.sendMail('oscargutierrezgodoy@hotmail.com', 'pana');
+    console.log("Get");
   }
 
   /** A POST is not ideal, an alternative could be query parameters. */
