@@ -16,9 +16,11 @@
         {{hour}}
       </td>
       <ng-container *ngFor="let day of hourKeyIndexes">
-        <td>
+        <td [ngStyle]="day[hour]!== null?{'background-color':day[hour].colorcito}:{}">
           <ng-container *ngIf="day[hour] as event;">
             <ng-container *ngIf="event.isModule; else course">
+              
+              <div>
               <small style="cursor: pointer;" nz-popover
                 [nzPopoverTitle]="'Modulo ' + event.mod_name + ' - ' + event.course21_name"
                 [nzPopoverContent]="popoverContent"
@@ -45,6 +47,8 @@
                   </small>
                   <br>
                 </ng-template>
+
+              </div>
               </ng-container>
             <ng-template #course>
               <small style="cursor: pointer;" nz-popover

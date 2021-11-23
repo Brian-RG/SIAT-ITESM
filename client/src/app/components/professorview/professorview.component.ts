@@ -28,6 +28,10 @@ export class ProfessorviewComponent implements OnInit {
   public assignedModules: Array<any> = [];
   public classroom: Classroom;
 
+  private colors:Array<string>;
+
+  private mapped = new Map();
+
   constructor(
     private activatedRoute: ActivatedRoute,
     private apiService: ApiService,
@@ -48,6 +52,16 @@ export class ProfessorviewComponent implements OnInit {
   public changePeriod(data){
     if(data!==null){
       this.getAssignedGroups(data);
+      this.colors=  ['#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
+      '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
+      '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
+      '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
+      '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', 
+      '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+      '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', 
+      '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+      '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
+      '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'];
     }
   }
 
@@ -98,6 +112,29 @@ export class ProfessorviewComponent implements OnInit {
     allGroups = allGroups.filter((el) => {
       let initialWeek = null;
       let finalWeek = null;
+      
+      if(this.colors.length>0){
+        let eventGroup;
+        if(el.isModule){
+          eventGroup = el.module21_groupId;
+        }
+        else{
+          eventGroup = el.group20_id;
+        }
+        if(this.mapped.has(eventGroup)){
+          el.colorcito = this.mapped.get(eventGroup)
+        }
+        else{
+          let currColor = this.colors.pop();
+          this.mapped.set(eventGroup, currColor);
+          el.colorcito = currColor;
+        }
+
+      }
+      else{
+        el.colorcito="white";
+      }
+
 
       if (el.isModule){
         initialWeek = el.course21_initialWeek;

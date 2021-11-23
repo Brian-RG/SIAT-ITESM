@@ -23,6 +23,7 @@ export class UserAdminComponent implements OnInit {
     {display: 'Nomina', prop: 'nomina'},
     {display: 'Nombre', prop: 'name'},
     {display: 'Password', prop: 'password'},
+    {display: 'Rol', prop:'type'}
   ];
   public users: Array<Users>;
   // public professors: Array<Professor>;

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output ,ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'siat-schedule-professor',
@@ -15,7 +15,7 @@ export class ScheduleProfessorComponent implements OnInit, OnChanges{
   private dayEvents: Array<Array<any>> = [[], [], [], [], [], []];
   public visiblePopover: boolean;
 
-  constructor() {}
+  constructor(private cdRef:ChangeDetectorRef) {}
 
   ngOnInit(): void {}
 
@@ -26,9 +26,29 @@ export class ScheduleProfessorComponent implements OnInit, OnChanges{
       this.getDayEvents();
       this.assignDayEventsToHours();
 
+
       //console.log(this.dayEvents);
     }
   }
+
+  public setStyle(value: string): unknown {
+    console.log(value);
+    if (value == "") return null;
+    //Example: value = "background-color:blue";
+    var properties = value.split(";");
+    var keyValuePairs = {};
+    properties.forEach(o => {
+      var key = String(o.split(":")[0]).trim();
+      var value = String(o.split(":")[1]).trim();
+      if (key.length > 0) {
+        keyValuePairs[key] = value;
+      }
+    })
+    console.log("keyValuePairs: " + JSON.stringify(keyValuePairs));
+    return keyValuePairs;
+  }
+
+
 
   public getDayEvents() {
     for (let i = 0; i < 6; i++) {
