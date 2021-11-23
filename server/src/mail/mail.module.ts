@@ -4,6 +4,7 @@ import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { dirname, join } from 'path';
 import { JoinTable } from 'typeorm';
+import { MailController } from './mail.controller';
 
 let a = __dirname;
 let b = dirname(__filename);
@@ -35,6 +36,7 @@ console.log(b);
     }),
   ],
   providers: [MailService],
-  exports: [MailService], 
+  exports: [MailService],
+  controllers: [MailController], 
 })
 export class MailModule {}
