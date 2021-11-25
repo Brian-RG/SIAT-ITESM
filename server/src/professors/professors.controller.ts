@@ -16,11 +16,13 @@ import { JwtRequest } from '../utils/interfaces/request-token';
 import { UpdateProfessorDto } from './dto/update-professor.dto';
 import { ApiBearerAuth } from '@nestjs/swagger';
 import { AvailableReq } from './interfaces/availableReq.interface';
+import { CorreoProfessorsReq } from './interfaces/CorreoProfessorsReq';
+import { MailService } from '../mail/mail.service';
 
 @ApiBearerAuth('access-token')
 @Controller('professors')
 export class ProfessorsController {
-  constructor(private readonly professorsService: ProfessorsService) {}
+  constructor(private readonly professorsService: ProfessorsService, private readonly mailService: MailService) {}
 
   @UseGuards(JwtAuthGuard)
   @Post()
@@ -32,6 +34,13 @@ export class ProfessorsController {
   @Get()
   findAll(@Request() req: JwtRequest) {
     return this.professorsService.findAll(req.user.id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Post('enviar-correo')
+  sendSchedule(@Request() req: JwtRequest, @Body() correoReq: CorreoProfessorsReq){
+    //this.mailService.sendMail('oscargutierrezgodoy@hotmail.com', 'pana');
+    return this.professorsService.enviarHorarios(correoReq);
   }
 
   @UseGuards(JwtAuthGuard)

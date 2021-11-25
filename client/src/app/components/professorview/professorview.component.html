@@ -1,4 +1,4 @@
-<nz-page-header (nzBack)="onBack()" nzBackIcon [nzTitle]="'Profe '"
+<nz-page-header (nzBack)="onBack()" nzBackIcon [nzTitle]="'Horario'"
   style="padding-left: 0; padding-top: 0;">
 </nz-page-header>
 <div nz-row [nzGutter]="16">
@@ -19,7 +19,8 @@
         <nz-select [(ngModel)]="week" style="width: 100%;">
           <nz-option *ngFor="let w of weeks" [nzValue]="w" [nzLabel]="w"></nz-option>
         </nz-select>
-      </div>
+      </div> 
+      <button nz-button nzType="primary" style="margin-top: 16px; margin-left: 8px; border-radius: 5px;"  (click)="enviarCorreo()">Enviar Correo</button>
     </div>
   </div>
   <div nz-col [nzSpan]="18">

@@ -10,6 +10,9 @@ import { CreateProfessorsReq } from './interfaces/createProfessorsReq';
 import { UpdateProfessorDto } from './dto/update-professor.dto';
 import { AvailableReq } from './interfaces/availableReq.interface';
 import { EventsService } from '../events/events.service';
+import { MailService } from 'src/mail/mail.service';
+
+import { CorreoProfessorsReq } from './interfaces/CorreoProfessorsReq';
 
 import { UserType } from 'src/users/usertype/user-type';
 
@@ -21,7 +24,12 @@ export class ProfessorsService {
     @InjectRepository(UsersEntity)
     private userRep : Repository<UsersEntity>,
     private readonly eventsService: EventsService,
+    private readonly mailService: MailService
   ) {}
+
+
+
+
 
   /**
    * Creates a new professor in the database assigned to the user.
@@ -99,6 +107,193 @@ export class ProfessorsService {
     );
   }
 
+  async createSchedule(data: any){
+    let weekdays = ["lunes","martes","miercoles","jueves","viernes","sabado"];
+    let response = {};
+
+    let weeks = {
+      "1":{add:[], del:[]},
+      "2":{add:[], del:[]},
+      "3":{add:[], del:[]},
+      "4":{add:[], del:[]},
+      "5":{add:[], del:[]},
+      "6":{add:[], del:[]},
+      "7":{add:[], del:[]},
+      "8":{add:[], del:[]},
+      "9":{add:[], del:[]},
+      "10":{add:[], del:[]},
+      "11":{add:[], del:[]},
+      "12":{add:[], del:[]},
+      "13":{add:[], del:[]},
+      "14":{add:[], del:[]},
+      "15":{add:[], del:[]},
+      "16":{add:[], del:[]},
+      "17":{add:[], del:[]},
+      "18":{add:[], del:[]},
+      "19":{add:[], del:[]},
+      "20":{add:[], del:[]},
+    };
+
+    let gruposTec20 = data.tec20;
+    let gruposTec21 = data.tec21;
+    let current_events = {};
+
+    for(let i = 0 ; i < gruposTec20.length ; i++){
+      let current_group20 = gruposTec20[i];
+      let initialWeek = current_group20.course20_initialWeek;
+      let finalWeek = ((initialWeek + current_group20.course20_weeks)-1);
+      //console.log(current_group20);
+      let eventData = {
+        eventId: current_group20.event_id,
+        weekDay: current_group20.event_weekDay,
+        data: {
+          courseName: current_group20.course20_name,
+          classroom: current_group20.classroom20_classroom,
+          startTimeString: current_group20.event_startTimeString,
+          endTimeString: current_group20.event_endTimeString
+        }       
+      }
+      weeks[initialWeek].add.push(eventData);
+      weeks[finalWeek].del.push(eventData.eventId);
+    }
+
+    for(let i = 0 ; i < gruposTec21.length ; i++){
+      let current_group21 = gruposTec21[i];
+      let initialWeek = current_group21.course21_initialWeek;
+      let finalWeek = ((initialWeek + current_group21.course21_weeks)-1);
+      //console.log(current_group21);
+      let eventData = {
+        eventId: current_group21.event_id,
+        weekDay: current_group21.event_weekDay,
+        data: {
+          courseName: current_group21.mod_name,
+          classroom: current_group21.classroom21_classroom,
+          startTimeString: current_group21.event_startTimeString,
+          endTimeString: current_group21.event_endTimeString
+
+        }       
+      }
+
+      weeks[initialWeek].add.push(eventData);
+      weeks[finalWeek].del.push(eventData.eventId);
+    }
+for(const weeknum in weeks){
+  // let n = Object.entries(current_events).length;
+  //     console.log("EVENTS:"+n);
+      let days = {
+        "lunes":[],
+        "martes":[],
+        "miercoles":[],
+        "jueves":[],
+        "viernes":[],
+        "sabado":[],
+      };
+
+      let groups_to_add = weeks[weeknum].add;
+      let groups_to_remove = weeks[weeknum].del;
+      
+
+      for(let j=0; j<groups_to_add.length; j++){
+        let current_event = groups_to_add[j];
+        current_events[current_event.eventId] = {weekDay: current_event.weekDay, data:current_event.data};
+      }
+
+      for(const event_id in current_events){
+        let curr_event = current_events[event_id];
+        let dayname = weekdays[curr_event.weekDay];
+        days[dayname].push(curr_event.data);
+      }
+
+      for(let j=0; j<groups_to_remove.length; j++){
+        let current_id = groups_to_remove[j];
+        delete current_events[current_id];
+      }
+
+      response[weeknum] = days;
+
+      //console.log(days);
+
+    }
+
+    //console.log(response);
+    return response;
+  } 
+
+  async enviarHorarios(
+    professors: CorreoProfessorsReq
+  ){
+    console.log("^^")
+    let periodId = professors.periodId;
+    for(let i=0; i<professors.professors.length; i++){
+      let current_professor = professors.professors[i];
+      let professordata = await this.professorsRepository.find({select:["email"], where:{id:current_professor.id}});
+      
+      if(professordata.length){
+        let horarios = await this.fetchHorarios(current_professor.id, periodId);
+        let data = await this.createSchedule(horarios);
+        let current_email = professordata[0].email;
+        await this.mailService.sendMail(current_email, data);
+      }
+
+    }
+
+    return db.createResponseStatus(HttpStatus.CREATED, "Correo enviado con exito");
+  }
+  
+  async fetchHorarios(id:string, periodId:string){
+    const tec20Info = this.professorsRepository
+      .createQueryBuilder('professor')
+      .innerJoin('professor.groups20', 'groups20')
+      .innerJoin('groups20.group', 'group20')
+      .innerJoin('group20.course', 'course20')
+      .innerJoin('group20.period', 'period20')
+      .innerJoin('group20.events', 'event')
+      .innerJoin('group20.classroom', 'classroom20')
+      .select('event')
+      .addSelect('group20')
+      .addSelect('course20')
+      .addSelect('classroom20')
+      .where('(professor.id = :id) AND (period20.id = :periodId)', {
+        id: id,
+        periodId: periodId,
+      });
+
+    const tec21Info = this.professorsRepository
+    .createQueryBuilder('professor')
+    .innerJoin('professor.groups21', 'groups21')
+    .innerJoin('groups21.group', 'moduleG21')
+    .innerJoin('moduleG21.group', 'group21')
+    .innerJoin('group21.course21', 'course21')
+    .innerJoin('moduleG21.events', 'event')
+    .innerJoin('moduleG21.classroom', 'classroom21')
+    .innerJoin('moduleG21.module', 'mod')
+    .innerJoin('group21.period', 'period21')
+    .select('event')
+    .addSelect('group21')
+    .addSelect('course21')
+    .addSelect('moduleG21')
+    .addSelect('classroom21')
+    .addSelect('mod')
+    .where('(professor.id = :id) AND (period21.id = :periodId)', {
+      id: id,
+      periodId: periodId,
+    });
+
+    //console.log(tec21Info.getQuery());
+
+    const tec20Data = await tec20Info.getRawMany();
+
+    const tec21Data = await tec21Info.getRawMany();
+
+
+
+    const data = {
+        "tec20":tec20Data,
+        "tec21":tec21Data
+    }
+
+    return data;
+  }
 
   async getHorarios(id:string, periodId:string){
     const tec20Info = this.professorsRepository

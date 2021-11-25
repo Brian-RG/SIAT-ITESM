@@ -20,6 +20,7 @@ import { DirectorsModule } from './directors/directors.module';
 import { UsuariosController } from './usuarios/usuarios.controller';
 import { UsuariosService } from './usuarios/usuarios.service';
 import { UsuariosModule } from './usuarios/usuarios.module';
+import { MailModule } from './mail/mail.module';
 
 @Module({
   imports: [
@@ -45,6 +46,7 @@ import { UsuariosModule } from './usuarios/usuarios.module';
     ExportModule,
     DirectorsModule,
     UsuariosModule,
+    MailModule,
   ],
 })
 export class AppModule {}

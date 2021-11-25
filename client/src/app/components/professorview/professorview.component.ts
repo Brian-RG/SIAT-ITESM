@@ -51,11 +51,36 @@ export class ProfessorviewComponent implements OnInit {
 
   public changePeriod(data){
     if(data!==null){
+      this.periodId = data;
       this.getAssignedGroups(data);
       this.colors=  ['#A1D6AF', '#F0F8FF', '#E0FFFF', '#F5DEB3', '#FFFFF0', 
       '#FFFAFA', '#F5FFFA', '#F0FFFF', '#F8F8FF', '#FAF0E6',
       '#FFF5EE', '#F0FFF0', '#FFE4C4', '#FFE4E1', '#FAEBD7'];
     }
+  }
+
+  public enviarCorreo(){
+    console.log(this.periodId);
+    if(this.periodId === undefined){
+      this.nzMessageService.error('Ocurrió un error al enviar el correo, favor de elegir un periodo.');
+      return;
+    }
+    this.loading = true;
+    this.apiService.post('/professors/enviar-correo', {professors: [{id : this.professorId}], periodId:this.periodId}).subscribe(
+      (response) => {
+        this.loading = false;
+        console.log(response);
+        if (response.status?.statusCode === 201){
+          this.nzMessageService.success('Horario enviado con éxito');
+        } else {
+          this.nzMessageService.error('Ocurrió un error al enviar el correo');
+        }
+      },
+      (error) => {
+        this.loading = false;
+        this.nzMessageService.error('Ocurrió un error al enviar el correo');
+      }
+    );
   }
 
   public getPeriods(){
