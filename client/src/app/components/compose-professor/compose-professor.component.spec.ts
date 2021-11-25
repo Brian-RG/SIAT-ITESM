@@ -59,6 +59,7 @@ describe('ComposeProfessorComponent', () => {
     const professorDummy: Professor = {
       name: 'Jirafales',
       nomina: 'L012345678',
+      password: 'password',
       coordination: 'coordinacion',
       area: ['matemáticas'],
       email: 'jirafales@gmail.com',
@@ -101,6 +102,7 @@ describe('ComposeProfessorComponent', () => {
     const professorDummy: Professor = {
       name: 'Jirafales',
       nomina: 'L012345678',
+      password: 'password',
       coordination: 'coordinacion',
       area: ['matemáticas'],
       email: 'jirafales@gmail.com',
@@ -122,6 +124,7 @@ describe('ComposeProfessorComponent', () => {
         name: 'Jirafales',
         nomina: 'L012345678',
         coordination: 'coordinacion',
+        password: 'password',
         area: ['matemáticas'],
         email: 'jirafales@gmail.com',
         loadLimit: 15,

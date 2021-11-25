@@ -35,6 +35,7 @@ export class ComposeProfessorComponent implements OnInit {
     this.professorForm = this.formBuilder.group({
       name: ['', [Validators.required]],
       nomina: ['', [Validators.required]],
+      password: ['', [Validators.required]],
       coordination: [''],
       area: [[]],
       email: ['', [Validators.required, Validators.email]],
@@ -46,6 +47,7 @@ export class ComposeProfessorComponent implements OnInit {
     this.professorForm = this.formBuilder.group({
       name: [this.professor.name, [Validators.required]],
       nomina: [this.professor.nomina, [Validators.required]],
+      password: [this.professor.password, [Validators.required]],
       coordination: [this.professor.coordination],
       area: [this.professor.area],
       email: [this.professor.email, [Validators.required, Validators.email]],

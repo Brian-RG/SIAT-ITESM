@@ -108,7 +108,7 @@ export class ProfessorsService {
   }
 
   async createSchedule(data: any){
-    let weekdays = ["lunes","martes","miercoles","jueves","viernes","sabado"];
+    let weekdays = ["Lunes","Martes","Miercoles","Jueves","Viernes","Sabado"];
     let response = {};
 
     let weeks = {
@@ -147,7 +147,9 @@ export class ProfessorsService {
         eventId: current_group20.event_id,
         weekDay: current_group20.event_weekDay,
         data: {
+          groupNumber: current_group20.group20_number,
           courseName: current_group20.course20_name,
+          buildingNumber: current_group20.classroom20_building,
           classroom: current_group20.classroom20_classroom,
           startTimeString: current_group20.event_startTimeString,
           endTimeString: current_group20.event_endTimeString
@@ -166,7 +168,9 @@ export class ProfessorsService {
         eventId: current_group21.event_id,
         weekDay: current_group21.event_weekDay,
         data: {
+          groupNumber: current_group21.group21_number,
           courseName: current_group21.mod_name,
+          buildingNumber: current_group21.classroom21_building,
           classroom: current_group21.classroom21_classroom,
           startTimeString: current_group21.event_startTimeString,
           endTimeString: current_group21.event_endTimeString
@@ -181,12 +185,12 @@ for(const weeknum in weeks){
   // let n = Object.entries(current_events).length;
   //     console.log("EVENTS:"+n);
       let days = {
-        "lunes":[],
-        "martes":[],
-        "miercoles":[],
-        "jueves":[],
-        "viernes":[],
-        "sabado":[],
+        "Lunes":[],
+        "Martes":[],
+        "Miercoles":[],
+        "Jueves":[],
+        "Viernes":[],
+        "Sabado":[],
       };
 
       let groups_to_add = weeks[weeknum].add;
@@ -212,7 +216,6 @@ for(const weeknum in weeks){
       response[weeknum] = days;
 
       //console.log(days);
-
     }
 
     //console.log(response);
@@ -221,8 +224,8 @@ for(const weeknum in weeks){
 
   async enviarHorarios(
     professors: CorreoProfessorsReq
+    
   ){
-    console.log("^^")
     let periodId = professors.periodId;
     for(let i=0; i<professors.professors.length; i++){
       let current_professor = professors.professors[i];
@@ -233,6 +236,7 @@ for(const weeknum in weeks){
         let data = await this.createSchedule(horarios);
         let current_email = professordata[0].email;
         await this.mailService.sendMail(current_email, data);
+       
       }
 
     }

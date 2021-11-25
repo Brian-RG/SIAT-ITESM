@@ -12,6 +12,12 @@
     </nz-form-control>
   </nz-form-item>
   <nz-form-item>
+    <nz-form-label nzRight [nzSpan]="6" nzRequired nzFor="password">Contraseña</nz-form-label>
+    <nz-form-control [nzSpan]="16" nzErrorTip="La contraseña del maestro es requerida...">
+      <input nz-input formControlName="password" id="password" type="password"/>
+    </nz-form-control>
+  </nz-form-item>
+  <nz-form-item>
     <nz-form-label [nzSpan]="6" nzFor="coordination">Coordinación</nz-form-label>
     <nz-form-control [nzSpan]="16">
       <input nz-input formControlName="coordination" id="coordination" type="text"/>
